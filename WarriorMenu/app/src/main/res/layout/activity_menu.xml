@@ -1,0 +1,32 @@
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/lightgreytan">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/app_name"
+        android:textSize="@dimen/main_title"
+        android:textColor="@color/wayne_green"
+        android:id="@+id/main_textView1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal" />
+
+    <it.gmariotti.cardslib.library.view.CardListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/myList"/>
+
+    <it.gmariotti.cardslib.library.view.CardView
+        android:id="@+id/cardtest"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        />
+
+</LinearLayout>

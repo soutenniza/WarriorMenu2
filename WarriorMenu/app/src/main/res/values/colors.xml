@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+<color name="black">#000000</color>
+<color name="black_overlay">#66000000</color>
+<color name="wayne_green">#0b4f45</color>
+<color name="wayne_yellow">#ffcc33</color>
+<color name="lightgreytan">#CCCCBC</color>
+<color name="open_green">#00FF00</color>
+<color name="close_red">#D11919</color>
+</resources>

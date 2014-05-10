@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Use same ID to use built-in features -->
+    <TextView
+        android:id="@+id/card_title"
+        android:layout_marginLeft="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/rest_title"
+        android:textColor="@color/wayne_green"/>
+    <ImageView
+        android:layout_below="@id/card_title"
+        android:layout_marginLeft="6dp"
+        android:layout_marginBottom="2dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/card_picture"
+        android:src="@drawable/ic_launcher"/>
+    <TextView
+        android:layout_below="@id/card_title"
+        android:layout_toRightOf="@id/card_picture"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/card_address"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="@dimen/address_size"
+        android:text="Address Here"
+        android:textColor="@color/black"/>
+    <TextView
+        android:id="@+id/card_number"
+        android:layout_below="@id/card_address"
+        android:layout_toRightOf="@id/card_picture"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Number Here"
+        android:textSize="@dimen/address_size"
+        android:textColor="@color/black"/>
+    <TextView
+        android:id="@+id/card_dollar"
+        android:layout_below="@id/card_number"
+        android:layout_toRightOf="@id/card_picture"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Warrior Dollhairs"
+        android:textSize="@dimen/address_size"
+        android:textColor="@color/black"/>
+    <RatingBar
+        android:id="@+id/card_stars"
+        android:layout_below="@id/card_dollar"
+        android:layout_toRightOf="@id/card_picture"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:numStars="5"
+        android:rating="0"
+        android:isIndicator="true"/>
+    <TextView
+        android:id="@+id/card_open_close"
+        android:layout_below="@id/card_picture"
+        android:layout_marginLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="NEVER OPEN"
+        android:textColor="@color/open_green"/>
+    <TextView
+        android:id="@+id/card_hours"
+        android:layout_below="@id/card_open_close"
+        android:layout_marginLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="NEVER OPEN"
+        android:textSize="@dimen/address_size"
+        android:textColor="@color/black"/>
+
+
+</RelativeLayout>
