@@ -7,12 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.util.Log;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 import it.gmariotti.cardslib.library.internal.Card;
@@ -22,6 +24,10 @@ import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.CardThumbnail;
 import it.gmariotti.cardslib.library.view.CardListView;
 import it.gmariotti.cardslib.library.view.CardView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MenuActivity extends Activity {
 
@@ -87,46 +93,46 @@ public class MenuActivity extends Activity {
     }
 
     private Vector<RInfo> intRests(){
-        Vector<RInfo> temp = new Vector<RInfo>();
+        Vector<RInfo> restaurantArray = new Vector<RInfo>();
         String array;
         String[] infoArray;
         String strFile = null;
-        InputStream inFile = getResources().openRawResource(R.raw.restaurants_info);
+        InputStream inFile = getResources().openRawResource(R.raw.restaurants);
         try{
             strFile = inputStreamToString(inFile);
+            JSONArray restaurants = new JSONArray(strFile);
+            for (int i = 0; i < restaurants.length(); i++) {
+                JSONObject row = restaurants.getJSONObject(i);
+                RInfo restaurant = new RInfo();
+                restaurant.days = new HashMap<String, Day>();
+                JSONObject hours = row.getJSONObject("hours");
+                String[] days = {"sunday", "monday","tuesday",
+                        "wednesday", "thursday", "friday", "saturday"};
+
+                restaurant.name = row.getString("name");
+                restaurant.address = row.getString("address");
+                restaurant.latitude = row.getDouble("latitude");
+                restaurant.longitude = row.getDouble("longitude");
+                restaurant.warriorD = row.getBoolean("warrior_bucks");
+                restaurant.rating = row.getDouble("rating");
+                restaurant.number = row.getString("number");
+                for (int j = 0; j < days.length; j++) {
+                    Day day = new Day();
+                    JSONObject dayObj = hours.getJSONObject(days[j]);
+                    day.open = dayObj.getInt("open");
+                    day.close = dayObj.getInt("close");
+
+                    restaurant.days.put(days[j],day);
+                }
+                restaurantArray.add(restaurant);
+
+            }
         } catch (IOException e){
             e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        array = strFile;
-        infoArray = array.split("\n");
-        int numRest = infoArray.length/21;
-        for(int j = 0; j < numRest;j++){
-            RInfo test = new RInfo();
-            int i = 21*(j);
-            test.name = infoArray[i];
-            test.address = infoArray[i+1];
-            test.lat = Double.parseDouble(infoArray[i+2]);
-            test.longitude = Double.parseDouble(infoArray[i+3]);
-            test.warriorD = Integer.parseInt(infoArray[i+4]);
-            test.hour[0] = Integer.parseInt(infoArray[i+5]); //sundayOpen
-            test.hour[1] = Integer.parseInt(infoArray[i+6]); //sundayClose
-            test.hour[2] = Integer.parseInt(infoArray[i+7]); //monday
-            test.hour[3] = Integer.parseInt(infoArray[i+8]);
-            test.hour[4] = Integer.parseInt(infoArray[i+9]); //tuesday
-            test.hour[5] = Integer.parseInt(infoArray[i+10]);
-            test.hour[6] = Integer.parseInt(infoArray[i+11]); //wednesday
-            test.hour[7] = Integer.parseInt(infoArray[i+12]);
-            test.hour[8] = Integer.parseInt(infoArray[i+13]); //thursday
-            test.hour[9] = Integer.parseInt(infoArray[i+14]);
-            test.hour[10] = Integer.parseInt(infoArray[i+15]); //friday
-            test.hour[11] = Integer.parseInt(infoArray[i+16]);
-            test.hour[12] = Integer.parseInt(infoArray[i+17]); //saturday
-            test.hour[13] = Integer.parseInt(infoArray[i+18]);
-            test.rating = Float.parseFloat(infoArray[i + 19]);
-            test.number = infoArray[i+20];
-            temp.add(test);
-        }
-        return temp;
+        return restaurantArray;
     }
 
 
