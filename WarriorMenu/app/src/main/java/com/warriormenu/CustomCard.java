@@ -3,6 +3,7 @@ package com.warriormenu;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,6 +13,9 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -65,6 +69,9 @@ public class CustomCard extends Card {
         ratingBar = (RatingBar) parent.findViewById(R.id.card_stars);
         openClose = (TextView) parent.findViewById(R.id.card_open_close);
 
+        String stringDay = dayMapping.get(date.getDay());
+        Day dayHours = info.days.get(stringDay);
+
         if(resTitle != null){
             resTitle.setText(info.name);
             resTitle.setTypeface(typeface);
@@ -92,10 +99,8 @@ public class CustomCard extends Card {
         }
 
         if(openClose != null){
-            String stringDay = dayMapping.get(date.getDay());
-            Day dayHours = info.days.get(stringDay);
             int currentHour = date.getHours()*100;
-            if((dayHours.open < currentHour && dayHours.close > currentHour) || dayHours.open == 0000 ){
+            if((dayHours.open < currentHour && dayHours.close > currentHour) || dayHours.is24Hour()){
                 openClose.setText("Open Now!");
                 openClose.setTextColor(Color.parseColor("#009900"));
             } else{
@@ -103,7 +108,7 @@ public class CustomCard extends Card {
                 openClose.setTextColor(Color.parseColor("#D11919"));
             }
 
-            if(dayHours.open == 9999){
+            if(dayHours.isClosed()){
                 openClose.setText("Closed.");
                 openClose.setTextColor(Color.parseColor("#D11919"));
             }
@@ -111,60 +116,18 @@ public class CustomCard extends Card {
         }
 
         if(resHours != null){
-            String stringDay = dayMapping.get(date.getDay());
-            Day dayHours = info.days.get(stringDay);
-            String hours = "Hours: ";
-            String temp;
-            if(dayHours.open > 999)
-                if(dayHours.open > 1200){
-                    int i = dayHours.open - 1200;
-                    temp = Integer.toString(i);
-                    hours = hours + temp.charAt(0) + ":" + temp.charAt(1) + temp.charAt(2) + "PM";
-                }else if(dayHours.open == 9999)
-                hours = "Closed Today";
-                else {
-                    int i = dayHours.open;
-                    temp = Integer.toString(i);
-                    hours = hours + temp.charAt(0) + temp.charAt(1)+ ":" + temp.charAt(2) + temp.charAt(3) + "AM";
-                }
-            else if (dayHours.open == 0000){
-                hours = "Open 24 Hours";
-            }else{
-                temp = Integer.toString(dayHours.open);
-                hours = hours + temp.charAt(0) + ":" + temp.charAt(1) + temp.charAt(2) + "AM";
-            }
-            if(dayHours.close == 9999)
-                hours += "";
-            else if(dayHours.close == 0000)
-                hours += "";
-            else if(dayHours.close > 999){
-                hours += " - ";
-                if(dayHours.close > 1200){
-                    if(dayHours.close > 2400){
-                        int i = dayHours.close - 2400;
-                        temp = Integer.toString(i);
-                        hours = hours + temp.charAt(0) + ":" + temp.charAt(1) + temp.charAt(2) + "AM";
-                    }else{
-                      int i = dayHours.close - 1200;
-                      temp = Integer.toString(i);
-                      hours = hours + temp.charAt(0) + ":" + temp.charAt(1) + temp.charAt(2) + "PM";
-                    }
-                } else {
-                    int i = dayHours.close;
-                    temp = Integer.toString(i);
-                    hours = hours + temp.charAt(0) + temp.charAt(1)+ ":" + temp.charAt(2) + temp.charAt(3) + "AM";
-                }
-            }else{
-                hours += " - ";
-                temp = Integer.toString(dayHours.close);
-                hours = hours + temp.charAt(0) + ":" + temp.charAt(1) + temp.charAt(2) + "AM";
+            String hours = new String();
+            if(dayHours.isClosed()) {
+                hours = "Closed Today.";
+            } else if(dayHours.is24Hour()) {
+                hours = "Open 24 hours.";
+            } else {
+                hours = "Hours: " + dayHours.openTimeString() + " - " + dayHours.closeTimeString();
             }
 
-            //hours = hours + " - " + temp.charAt(0) + temp.charAt(1) + ":" + temp.charAt(2) + temp.charAt(3);
             resHours.setText(hours);
             resHours.setTypeface(typeface);
         }
-
 
         if(ratingBar != null){
             ratingBar.setNumStars(5);
