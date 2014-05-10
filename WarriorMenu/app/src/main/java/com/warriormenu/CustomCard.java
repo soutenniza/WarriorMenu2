@@ -14,6 +14,8 @@ import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import it.gmariotti.cardslib.library.internal.Card;
 
@@ -47,6 +49,13 @@ public class CustomCard extends Card {
     public void setupInnerViewElements(ViewGroup parent, View view){
         Calendar calendar = Calendar.getInstance();
         Date date = new Date();
+        Map<Integer, String> dayMapping = new HashMap<Integer, String>();
+
+        String[] days = {"sunday", "monday","tuesday",
+                "wednesday", "thursday", "friday", "saturday"};
+        for (int i = 0; i < days.length; i++) {
+            dayMapping.put(i+1, days[i]);
+        }
         resTitle = (TextView) parent.findViewById(R.id.card_title);
         resImage = (ImageView) parent.findViewById(R.id.card_picture);
         resAddress = (TextView) parent.findViewById(R.id.card_address);
@@ -75,7 +84,7 @@ public class CustomCard extends Card {
         }
 
         if(warriorDollars != null){
-            if(info.warriorD == 1)
+            if(info.warriorD)
                 warriorDollars.setText("Warrior Dollars: Yes");
             else
                 warriorDollars.setText("Warrior Dollars: No");
@@ -83,8 +92,10 @@ public class CustomCard extends Card {
         }
 
         if(openClose != null){
-            int day = (date.getDay()+1)*2;
-            if((info.hour[day] < date.getHours()*100 && info.hour[day+1] > date.getHours()*100) || info.hour[day] == 0000 ){
+            String stringDay = dayMapping.get(date.getDay());
+            Day dayHours = info.days.get(stringDay);
+            int currentHour = date.getHours()*100;
+            if((dayHours.open < currentHour && dayHours.close > currentHour) || dayHours.open == 0000 ){
                 openClose.setText("Open Now!");
                 openClose.setTextColor(Color.parseColor("#009900"));
             } else{
@@ -92,7 +103,7 @@ public class CustomCard extends Card {
                 openClose.setTextColor(Color.parseColor("#D11919"));
             }
 
-            if(info.hour[day] == 9999){
+            if(dayHours.open == 9999){
                 openClose.setText("Closed.");
                 openClose.setTextColor(Color.parseColor("#D11919"));
             }
@@ -100,51 +111,52 @@ public class CustomCard extends Card {
         }
 
         if(resHours != null){
-            int day = (date.getDay()+1)*2;
+            String stringDay = dayMapping.get(date.getDay());
+            Day dayHours = info.days.get(stringDay);
             String hours = "Hours: ";
             String temp;
-            if(info.hour[day] > 999)
-                if(info.hour[day] > 1200){
-                    int i = info.hour[day] - 1200;
+            if(dayHours.open > 999)
+                if(dayHours.open > 1200){
+                    int i = dayHours.open - 1200;
                     temp = Integer.toString(i);
                     hours = hours + temp.charAt(0) + ":" + temp.charAt(1) + temp.charAt(2) + "PM";
-                }else if(info.hour[day] == 9999)
+                }else if(dayHours.open == 9999)
                 hours = "Closed Today";
                 else {
-                    int i = info.hour[day];
+                    int i = dayHours.open;
                     temp = Integer.toString(i);
                     hours = hours + temp.charAt(0) + temp.charAt(1)+ ":" + temp.charAt(2) + temp.charAt(3) + "AM";
                 }
-            else if (info.hour[day] == 0000){
+            else if (dayHours.open == 0000){
                 hours = "Open 24 Hours";
             }else{
-                temp = Integer.toString(info.hour[day]);
+                temp = Integer.toString(dayHours.open);
                 hours = hours + temp.charAt(0) + ":" + temp.charAt(1) + temp.charAt(2) + "AM";
             }
-            if(info.hour[day+1] == 9999)
+            if(dayHours.close == 9999)
                 hours += "";
-            else if(info.hour[day+1] == 0000)
+            else if(dayHours.close == 0000)
                 hours += "";
-            else if(info.hour[day+1] > 999){
+            else if(dayHours.close > 999){
                 hours += " - ";
-                if(info.hour[day+1] > 1200){
-                    if(info.hour[day+1] > 2400){
-                        int i = info.hour[day+1] - 2400;
+                if(dayHours.close > 1200){
+                    if(dayHours.close > 2400){
+                        int i = dayHours.close - 2400;
                         temp = Integer.toString(i);
                         hours = hours + temp.charAt(0) + ":" + temp.charAt(1) + temp.charAt(2) + "AM";
                     }else{
-                      int i = info.hour[day+1] - 1200;
+                      int i = dayHours.close - 1200;
                       temp = Integer.toString(i);
                       hours = hours + temp.charAt(0) + ":" + temp.charAt(1) + temp.charAt(2) + "PM";
                     }
                 } else {
-                    int i = info.hour[day+1];
+                    int i = dayHours.close;
                     temp = Integer.toString(i);
                     hours = hours + temp.charAt(0) + temp.charAt(1)+ ":" + temp.charAt(2) + temp.charAt(3) + "AM";
                 }
             }else{
                 hours += " - ";
-                temp = Integer.toString(info.hour[day+1]);
+                temp = Integer.toString(dayHours.close);
                 hours = hours + temp.charAt(0) + ":" + temp.charAt(1) + temp.charAt(2) + "AM";
             }
 
@@ -156,7 +168,7 @@ public class CustomCard extends Card {
 
         if(ratingBar != null){
             ratingBar.setNumStars(5);
-            ratingBar.setRating(info.rating);
+            ratingBar.setRating((float)info.rating);
         }
 
     }
