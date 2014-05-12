@@ -2,6 +2,8 @@ package com.warriormenu;
 
 import android.app.Activity;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -44,12 +49,23 @@ public class MenuActivity extends Activity {
         mainTitle.setTypeface(typeface);
         ArrayList<Card> cards = new ArrayList<Card>();
 
+        LocationManager locationManager = (LocationManager) this.getSystemService(getBaseContext().LOCATION_SERVICE);
         for(int i = 0; i < restaurants.size();i++){
-           CustomCard card = new CustomCard(getBaseContext(), restaurants.get(i), typeface, typeface2);
+           CustomCard card = new CustomCard(getBaseContext(), restaurants.get(i), typeface, typeface2, locationManager);
             card.setShadow(true);
             card.setSwipeable(true);
            cards.add(card);
         }
+
+        Collections.sort(cards, new Comparator<Card>() {
+            @Override
+            public int compare(Card card, Card card2) {
+                /*boolean bool = ((CustomCard) card).info.distance < ((CustomCard) card2).info.distance;
+                int i = bool ? 1:0;
+                return i;*/
+                return ((CustomCard) card).info.name.compareTo(((CustomCard) card2).info.name);
+            }
+        });
 
         CardArrayAdapter myAdapter = new CardArrayAdapter(getApplicationContext(),cards);
 

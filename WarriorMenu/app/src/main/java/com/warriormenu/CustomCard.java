@@ -1,9 +1,15 @@
 package com.warriormenu;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.location.GpsStatus;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,16 +46,18 @@ public class CustomCard extends Card {
     protected RInfo info;
     protected Typeface typeface;
     protected Typeface typeface2;
+    protected LocationManager locationManager;
 
-    public CustomCard(Context context, RInfo r, Typeface t, Typeface t2){
-        this(context, R.layout.card_thumbnail, r,t, t2);
+    public CustomCard(Context context, RInfo r, Typeface t, Typeface t2, LocationManager lc){
+        this(context, R.layout.card_thumbnail, r,t, t2, lc);
     }
 
-    public CustomCard(Context context, int innerLayout, RInfo r, Typeface t, Typeface t2){
+    public CustomCard(Context context, int innerLayout, RInfo r, Typeface t, Typeface t2, LocationManager lc){
         super(context, innerLayout);
         this.info = r;
         this.typeface = t;
         this.typeface2 = t2;
+        this.locationManager = lc;
     }
 
 
@@ -142,19 +150,48 @@ public class CustomCard extends Card {
 
         if(resDistance != null){
             float[] results = new float[10];
-            Location location = new Location("Test");
-            location.setLatitude(42.361525);
-            location.setLongitude(-83.069586);
+            long l = 10000;
+            final LocationListener locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    double lat = location.getLatitude();
+                    double lon = location.getLongitude();
+                }
+
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String s) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String s) {
+
+                }
+            };
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, l, 100000f, locationListener);
+            Location location = new Location("");
+            /*location.setLatitude(42.361525);
+            location.setLongitude(-83.069586);*/
             Location.distanceBetween(location.getLatitude(), location.getLongitude(), info.latitude, info.longitude, results);
             float temp = results[0] * 0.0006213f;
             String str = String.format("%.3f", temp);
             resDistance.setText("Distance: " + str + " miles");
             resDistance.setTypeface(typeface);
 
+            info.url = "http://maps.google.com/maps?saddr=" + location.getLatitude() + "," + location.getLongitude();
+            info.url = info.url + "&daddr=" + info.latitude + "," + info.longitude;
             resDistance.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    resTitle.setText("clicked");
+                    resTitle.setText("Clicked!");
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(info.url));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getContext().startActivity(intent);
                 }
             });
 
