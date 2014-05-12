@@ -3,6 +3,7 @@ package com.warriormenu;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,17 +36,20 @@ public class CustomCard extends Card {
     protected TextView openClose;
     protected TextView resHours;
     protected RatingBar ratingBar;
+    protected TextView resDistance;
     protected RInfo info;
     protected Typeface typeface;
+    protected Typeface typeface2;
 
-    public CustomCard(Context context, RInfo r, Typeface t){
-        this(context, R.layout.card_thumbnail, r,t);
+    public CustomCard(Context context, RInfo r, Typeface t, Typeface t2){
+        this(context, R.layout.card_thumbnail, r,t, t2);
     }
 
-    public CustomCard(Context context, int innerLayout, RInfo r, Typeface t){
+    public CustomCard(Context context, int innerLayout, RInfo r, Typeface t, Typeface t2){
         super(context, innerLayout);
         this.info = r;
         this.typeface = t;
+        this.typeface2 = t2;
     }
 
 
@@ -58,7 +62,7 @@ public class CustomCard extends Card {
         String[] days = {"sunday", "monday","tuesday",
                 "wednesday", "thursday", "friday", "saturday"};
         for (int i = 0; i < days.length; i++) {
-            dayMapping.put(i+1, days[i]);
+            dayMapping.put(i, days[i]);
         }
         resTitle = (TextView) parent.findViewById(R.id.card_title);
         resImage = (ImageView) parent.findViewById(R.id.card_picture);
@@ -68,13 +72,15 @@ public class CustomCard extends Card {
         resHours = (TextView) parent.findViewById(R.id.card_hours);
         ratingBar = (RatingBar) parent.findViewById(R.id.card_stars);
         openClose = (TextView) parent.findViewById(R.id.card_open_close);
+        resDistance = (TextView) parent.findViewById(R.id.card_distance);
 
         String stringDay = dayMapping.get(date.getDay());
         Day dayHours = info.days.get(stringDay);
 
+
         if(resTitle != null){
             resTitle.setText(info.name);
-            resTitle.setTypeface(typeface);
+            resTitle.setTypeface(typeface2);
         }
 
         if(resImage != null)
@@ -132,6 +138,26 @@ public class CustomCard extends Card {
         if(ratingBar != null){
             ratingBar.setNumStars(5);
             ratingBar.setRating((float)info.rating);
+        }
+
+        if(resDistance != null){
+            float[] results = new float[10];
+            Location location = new Location("Test");
+            location.setLatitude(42.361525);
+            location.setLongitude(-83.069586);
+            Location.distanceBetween(location.getLatitude(), location.getLongitude(), info.latitude, info.longitude, results);
+            float temp = results[0] * 0.0006213f;
+            String str = String.format("%.3f", temp);
+            resDistance.setText("Distance: " + str + " miles");
+            resDistance.setTypeface(typeface);
+
+            resDistance.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    resTitle.setText("clicked");
+                }
+            });
+
         }
 
     }

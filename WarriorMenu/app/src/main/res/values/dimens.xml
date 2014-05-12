@@ -5,5 +5,6 @@
     <dimen name="main_title">40dp</dimen>
     <dimen name="rest_title">30dp</dimen>
     <dimen name="address_size">15dp</dimen>
+    <dimen name="distance">15dp</dimen>
 
     </resources>

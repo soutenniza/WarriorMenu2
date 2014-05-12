@@ -39,12 +39,13 @@ public class MenuActivity extends Activity {
         Vector<RInfo> restaurants = intRests();
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Roboto-LightItalic.ttf");
+        Typeface typeface2 = Typeface.createFromAsset(getAssets(), "Roboto-BoldCondensedItalic.ttf");
         TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(typeface);
         ArrayList<Card> cards = new ArrayList<Card>();
 
         for(int i = 0; i < restaurants.size();i++){
-           CustomCard card = new CustomCard(getBaseContext(), restaurants.get(i), typeface);
+           CustomCard card = new CustomCard(getBaseContext(), restaurants.get(i), typeface, typeface2);
             card.setShadow(true);
             card.setSwipeable(true);
            cards.add(card);

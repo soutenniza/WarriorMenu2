@@ -17,5 +17,6 @@ public class RInfo {
     public double latitude;
     public double longitude;
     Map<String, Day> days;
+    public float distance;
 }
 
