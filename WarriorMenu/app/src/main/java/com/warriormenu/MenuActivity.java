@@ -1,15 +1,24 @@
 package com.warriormenu;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.Typeface;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -24,48 +33,45 @@ import java.util.Vector;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
-import it.gmariotti.cardslib.library.internal.CardExpand;
-import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.internal.CardThumbnail;
 import it.gmariotti.cardslib.library.view.CardListView;
-import it.gmariotti.cardslib.library.view.CardView;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MenuActivity extends Activity {
+public class MenuActivity extends Activity implements LocationListener{
+    protected Location myLocation = new Location("current");
+    private PullToRefreshLayout myPulltoRefresh;
+    private ArrayList<Card> cards;
+    Vector<RInfo> restaurants;
+    Typeface typeface;
+    Typeface typeface2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        Vector<RInfo> restaurants = intRests();
+        restaurants = intRests();
+        cards = new ArrayList<Card>();
+        typeface = Typeface.createFromAsset(getAssets(), "Roboto-LightItalic.ttf");
+        typeface2 = Typeface.createFromAsset(getAssets(), "Roboto-BoldCondensedItalic.ttf");
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,0,this);
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "Roboto-LightItalic.ttf");
-        Typeface typeface2 = Typeface.createFromAsset(getAssets(), "Roboto-BoldCondensedItalic.ttf");
         TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(typeface);
-        ArrayList<Card> cards = new ArrayList<Card>();
 
-        LocationManager locationManager = (LocationManager) this.getSystemService(getBaseContext().LOCATION_SERVICE);
         for(int i = 0; i < restaurants.size();i++){
-           CustomCard card = new CustomCard(getBaseContext(), restaurants.get(i), typeface, typeface2, locationManager);
-            card.setShadow(true);
-            card.setSwipeable(true);
+           CustomCard card = new CustomCard(getBaseContext(), restaurants.get(i), typeface, typeface2, myLocation);
+           card.setShadow(true);
+           card.setSwipeable(true);
            cards.add(card);
         }
-
-        Collections.sort(cards, new Comparator<Card>() {
-            @Override
-            public int compare(Card card, Card card2) {
-                /*boolean bool = ((CustomCard) card).info.distance < ((CustomCard) card2).info.distance;
-                int i = bool ? 1:0;
-                return i;*/
-                return ((CustomCard) card).info.name.compareTo(((CustomCard) card2).info.name);
-            }
-        });
 
         CardArrayAdapter myAdapter = new CardArrayAdapter(getApplicationContext(),cards);
 
@@ -74,8 +80,11 @@ public class MenuActivity extends Activity {
             listView.setAdapter(myAdapter);
         }
 
-    }
+        //myPulltoRefresh = (PullToRefreshLayout) findViewById(R.id.refresh_layout);
 
+        //ActionBarPullToRefresh.from(this).allChildrenArePullable().listener(this).setup(myPulltoRefresh);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -96,6 +105,7 @@ public class MenuActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     private String inputStreamToString(InputStream is) throws IOException {
         StringBuffer sBuffer = new StringBuffer();
@@ -152,5 +162,36 @@ public class MenuActivity extends Activity {
         return restaurantArray;
     }
 
+    @Override
+    public void onProviderEnabled(String provider){
+        Log.d("provider:", "enabled");
+    }
+
+    @Override
+    public void onProviderDisabled(String provider){
+        Log.d("provider:", "disabled");
+    }
+
+    @Override
+    public void onLocationChanged(Location location){
+        myLocation.setLatitude(location.getLatitude());
+        myLocation.setLongitude(location.getLongitude());
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extra){
+        Log.d("Lat", "Status");
+    }
+
+
+    /*@Override Placeholder for refresh
+    public void onRefreshStarted(View v){
+        for(int i = 0; i < restaurants.size();i++){
+            CustomCard card = new CustomCard(getBaseContext(), restaurants.get(i), typeface, typeface2, myLocation);
+            card.setShadow(true);
+            card.setSwipeable(true);
+            cards.add(card);
+        }
+    }*/
 
 }

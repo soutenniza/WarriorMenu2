@@ -3,7 +3,9 @@ package com.warriormenu;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.LayerDrawable;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
@@ -46,18 +48,19 @@ public class CustomCard extends Card {
     protected RInfo info;
     protected Typeface typeface;
     protected Typeface typeface2;
-    protected LocationManager locationManager;
+    protected Location location;
 
-    public CustomCard(Context context, RInfo r, Typeface t, Typeface t2, LocationManager lc){
+
+    public CustomCard(Context context, RInfo r, Typeface t, Typeface t2, Location lc){
         this(context, R.layout.card_thumbnail, r,t, t2, lc);
     }
 
-    public CustomCard(Context context, int innerLayout, RInfo r, Typeface t, Typeface t2, LocationManager lc){
+    public CustomCard(Context context, int innerLayout, RInfo r, Typeface t, Typeface t2, Location lc){
         super(context, innerLayout);
         this.info = r;
         this.typeface = t;
         this.typeface2 = t2;
-        this.locationManager = lc;
+        this.location = lc;
     }
 
 
@@ -146,40 +149,17 @@ public class CustomCard extends Card {
         if(ratingBar != null){
             ratingBar.setNumStars(5);
             ratingBar.setRating((float)info.rating);
+            LayerDrawable layer = (LayerDrawable) ratingBar.getProgressDrawable();
+            layer.getDrawable(2).setColorFilter(Color.parseColor("#ffcc33"), PorterDuff.Mode.SRC_ATOP);
         }
 
         if(resDistance != null){
             float[] results = new float[10];
-            long l = 10000;
-            final LocationListener locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    double lat = location.getLatitude();
-                    double lon = location.getLongitude();
-                }
-
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String s) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String s) {
-
-                }
-            };
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, l, 100000f, locationListener);
-            Location location = new Location("");
-            /*location.setLatitude(42.361525);
+            /*location.setLatitude(42.361525); //Mock Location
             location.setLongitude(-83.069586);*/
             Location.distanceBetween(location.getLatitude(), location.getLongitude(), info.latitude, info.longitude, results);
             float temp = results[0] * 0.0006213f;
-            String str = String.format("%.3f", temp);
+            String str = String.format("%.2f", temp);
             resDistance.setText("Distance: " + str + " miles");
             resDistance.setTypeface(typeface);
 
@@ -188,7 +168,6 @@ public class CustomCard extends Card {
             resDistance.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    resTitle.setText("Clicked!");
                     Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(info.url));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getContext().startActivity(intent);

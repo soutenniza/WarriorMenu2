@@ -18,15 +18,16 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal" />
 
-    <it.gmariotti.cardslib.library.view.CardListView
+    <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/myList"/>
+        android:layout_height="match_parent">
+        <it.gmariotti.cardslib.library.view.CardListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/myList"/>
+    </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
 
-    <it.gmariotti.cardslib.library.view.CardView
-        android:id="@+id/cardtest"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        />
+
 
 </LinearLayout>

@@ -59,7 +59,8 @@
         android:layout_height="match_parent"
         android:numStars="5"
         android:rating="0"
-        android:isIndicator="true"/>
+        android:isIndicator="true"
+        />
     <TextView
         android:id="@+id/card_open_close"
         android:layout_below="@id/card_picture"
