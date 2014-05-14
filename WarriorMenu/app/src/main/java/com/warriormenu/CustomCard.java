@@ -2,29 +2,22 @@ package com.warriormenu;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.LayerDrawable;
-import android.location.GpsStatus;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.cengalabs.flatui.views.FlatButton;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,6 +42,7 @@ public class CustomCard extends Card {
     protected Typeface typeface;
     protected Typeface typeface2;
     protected Location location;
+    protected FlatButton button;
 
 
     public CustomCard(Context context, RInfo r, Typeface t, Typeface t2, Location lc){
@@ -83,7 +77,8 @@ public class CustomCard extends Card {
         resHours = (TextView) parent.findViewById(R.id.card_hours);
         ratingBar = (RatingBar) parent.findViewById(R.id.card_stars);
         openClose = (TextView) parent.findViewById(R.id.card_open_close);
-        resDistance = (TextView) parent.findViewById(R.id.card_distance);
+        button = (FlatButton) parent.findViewById(R.id.card_button);
+
 
         String stringDay = dayMapping.get(date.getDay());
         Day dayHours = info.days.get(stringDay);
@@ -94,8 +89,9 @@ public class CustomCard extends Card {
             resTitle.setTypeface(typeface2);
         }
 
-        if(resImage != null)
-            resImage.setImageResource(R.drawable.jimmyjohns);
+        if(resImage != null) {
+            resImage.setImageResource(info.id);
+        }
 
         if(resAddress != null){
             resAddress.setText(info.address);
@@ -153,19 +149,18 @@ public class CustomCard extends Card {
             layer.getDrawable(2).setColorFilter(Color.parseColor("#ffcc33"), PorterDuff.Mode.SRC_ATOP);
         }
 
-        if(resDistance != null){
+        if(button != null){
             float[] results = new float[10];
             /*location.setLatitude(42.361525); //Mock Location
             location.setLongitude(-83.069586);*/
             Location.distanceBetween(location.getLatitude(), location.getLongitude(), info.latitude, info.longitude, results);
             float temp = results[0] * 0.0006213f;
             String str = String.format("%.2f", temp);
-            resDistance.setText("Distance: " + str + " miles");
-            resDistance.setTypeface(typeface);
-
+            button.setText(str + " miles");
+            button.setTypeface(typeface);
             info.url = "http://maps.google.com/maps?saddr=" + location.getLatitude() + "," + location.getLongitude();
             info.url = info.url + "&daddr=" + info.latitude + "," + info.longitude;
-            resDistance.setOnClickListener(new View.OnClickListener(){
+            button.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
                     Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(info.url));
@@ -174,7 +169,13 @@ public class CustomCard extends Card {
                 }
             });
 
+
+
         }
 
     }
+    public int imageID(Context context, String url){
+        return context.getResources().getIdentifier("drawable/" + url, null, context.getPackageName());
+    }
+
 }

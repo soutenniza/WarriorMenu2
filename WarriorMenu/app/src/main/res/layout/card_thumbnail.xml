@@ -3,7 +3,9 @@
 <RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:flatui="http://schemas.android.com/apk/res-auto">
+
 
     <!-- Use same ID to use built-in features -->
     <TextView
@@ -78,15 +80,17 @@
         android:text="NEVER OPEN"
         android:textSize="@dimen/address_size"
         android:textColor="@color/black"/>
-    <TextView
-        android:id="@+id/card_distance"
+    <com.cengalabs.flatui.views.FlatButton
+        android:id="@+id/card_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/distance"
-        android:text="1.5m from your location"
-        android:clickable="true"/>
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:textSize="12dp"
+        flatui:theme="@array/grass"
+        flatui:borderWidth="0dp"
+        flatui:cornerRadius="5dp"
+        flatui:size="20dp"/>
 
 
 </RelativeLayout>

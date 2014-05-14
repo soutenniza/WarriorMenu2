@@ -16,6 +16,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/fonts'] } }
 }
 
 dependencies {
@@ -27,4 +28,6 @@ dependencies {
     compile 'com.github.gabrielemariotti.cards:library-extra:1.5.0'
 
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
+
+    compile 'com.github.eluleci:flatui:2.0.0'
 }

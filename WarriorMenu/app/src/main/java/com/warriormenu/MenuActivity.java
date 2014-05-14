@@ -1,42 +1,36 @@
 package com.warriormenu;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentSender;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.cengalabs.flatui.FlatUI;
+import com.cengalabs.flatui.views.FlatButton;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Vector;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,14 +40,20 @@ public class MenuActivity extends Activity implements LocationListener{
     protected Location myLocation = new Location("current");
     private PullToRefreshLayout myPulltoRefresh;
     private ArrayList<Card> cards;
-    Vector<RInfo> restaurants;
-    Typeface typeface;
-    Typeface typeface2;
+    private Vector<RInfo> restaurants;
+    private Typeface typeface;
+    private Typeface typeface2;
+    private Vector<Drawable> drawables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 2;
+        options.inPurgeable = true;
+        options.inScaled = true;
 
         restaurants = intRests();
         cards = new ArrayList<Card>();
@@ -62,19 +62,35 @@ public class MenuActivity extends Activity implements LocationListener{
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,0,this);
-
         TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(typeface);
+        FlatUI.initDefaultValues(this);
+        FlatUI.setDefaultTheme(FlatUI.GRASS);
+        Resources res = getResources();
+        String packName = getPackageName();
+
+        try{
+            Thread.sleep(4000);
+        }catch(Exception ex) {
+            Log.d("waitcatch", "yes");
+        }
 
         for(int i = 0; i < restaurants.size();i++){
-           CustomCard card = new CustomCard(getBaseContext(), restaurants.get(i), typeface, typeface2, myLocation);
+           try {
+               restaurants.get(i).id = res.getIdentifier(restaurants.get(i).photoloc, "drawable", getPackageName());
+           }catch(Exception e){
+               Log.d("Exception", "e");
+           }
+
+           CustomCard card = new CustomCard(this, restaurants.get(i), typeface, typeface2, myLocation);
+           card.setId(card.info.address);
            card.setShadow(true);
-           card.setSwipeable(true);
+           //card.resImage.setImageResource(imageID(this, url));
+           //card.setSwipeable(true);
            cards.add(card);
         }
 
         CardArrayAdapter myAdapter = new CardArrayAdapter(getApplicationContext(),cards);
-
         CardListView listView = (CardListView) findViewById(R.id.myList);
         if (listView!=null){
             listView.setAdapter(myAdapter);
@@ -88,10 +104,8 @@ public class MenuActivity extends Activity implements LocationListener{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        return false;
     }
 
     @Override
@@ -143,6 +157,7 @@ public class MenuActivity extends Activity implements LocationListener{
                 restaurant.warriorD = row.getBoolean("warrior_bucks");
                 restaurant.rating = row.getDouble("rating");
                 restaurant.number = row.getString("number");
+                restaurant.photoloc = row.getString("photo_loc");
                 for (int j = 0; j < days.length; j++) {
                     Day day = new Day();
                     JSONObject dayObj = hours.getJSONObject(days[j]);
@@ -182,7 +197,6 @@ public class MenuActivity extends Activity implements LocationListener{
     public void onStatusChanged(String provider, int status, Bundle extra){
         Log.d("Lat", "Status");
     }
-
 
     /*@Override Placeholder for refresh
     public void onRefreshStarted(View v){

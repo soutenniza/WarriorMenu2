@@ -21,13 +21,13 @@
     <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/icon_wm">
         <it.gmariotti.cardslib.library.view.CardListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/myList"/>
     </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
-
 
 
 </LinearLayout>

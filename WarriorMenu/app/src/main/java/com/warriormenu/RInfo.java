@@ -12,12 +12,13 @@ public class RInfo {
     public String address;
     public String number;
     public boolean warriorD;
-    public String hours;
     public double rating;
     public double latitude;
     public double longitude;
     Map<String, Day> days;
     public float distance;
     public String url;
+    public String photoloc;
+    public int id;
 }
 
