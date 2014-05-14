@@ -20,5 +20,6 @@ public class RInfo {
     public String url;
     public String photoloc;
     public int id;
+    public boolean open;
 }
 

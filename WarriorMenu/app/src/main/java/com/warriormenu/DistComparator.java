@@ -12,11 +12,6 @@ public class DistComparator implements Comparator<Card> {
     public int compare(Card first, Card second){
         Float firstDist = ((CustomCard) first).info.distance;
         Float secondDist = ((CustomCard) second).info.distance;
-        if(firstDist.compareTo(secondDist) > 0)
-            return -1;
-        else if(firstDist.compareTo(secondDist) < 0)
-            return  1;
-        else
-            return 0;
+        return firstDist.compareTo(secondDist);
     }
 }

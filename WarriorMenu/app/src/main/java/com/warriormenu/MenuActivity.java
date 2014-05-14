@@ -11,8 +11,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.util.Log;
 
@@ -24,6 +30,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -40,34 +48,40 @@ public class MenuActivity extends Activity implements LocationListener{
     protected Location myLocation = new Location("current");
     private PullToRefreshLayout myPulltoRefresh;
     private ArrayList<Card> cards;
+    private ArrayList<Card> cardsOriginal;
     private Vector<RInfo> restaurants;
     private Typeface typeface;
     private Typeface typeface2;
-    private Vector<Drawable> drawables;
+    private LocationManager locationManager;
+    private String[] sortOptions;
+    private DrawerLayout drawerLayout;
+    private ListView drawerList;
+    private CardArrayAdapter myAdapter;
+    private CardListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 2;
-        options.inPurgeable = true;
-        options.inScaled = true;
-
         restaurants = intRests();
         cards = new ArrayList<Card>();
         typeface = Typeface.createFromAsset(getAssets(), "Roboto-LightItalic.ttf");
         typeface2 = Typeface.createFromAsset(getAssets(), "Roboto-BoldCondensedItalic.ttf");
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,0,this);
         TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(typeface);
         FlatUI.initDefaultValues(this);
         FlatUI.setDefaultTheme(FlatUI.GRASS);
-        Resources res = getResources();
-        String packName = getPackageName();
+        sortOptions = getResources().getStringArray(R.array.sorts);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerList = (ListView) findViewById(R.id.drawer_left);
+
+        drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_item, sortOptions));
+        drawerList.setOnItemClickListener(new DrawerItemClickListener());
+
 
         try{
             Thread.sleep(4000);
@@ -77,7 +91,7 @@ public class MenuActivity extends Activity implements LocationListener{
 
         for(int i = 0; i < restaurants.size();i++){
            try {
-               restaurants.get(i).id = res.getIdentifier(restaurants.get(i).photoloc, "drawable", getPackageName());
+               restaurants.get(i).id = getResources().getIdentifier(restaurants.get(i).photoloc, "drawable", getPackageName());
            }catch(Exception e){
                Log.d("Exception", "e");
            }
@@ -90,8 +104,9 @@ public class MenuActivity extends Activity implements LocationListener{
            cards.add(card);
         }
 
-        CardArrayAdapter myAdapter = new CardArrayAdapter(getApplicationContext(),cards);
-        CardListView listView = (CardListView) findViewById(R.id.myList);
+        cardsOriginal = new ArrayList<Card>(cards);
+        myAdapter = new CardArrayAdapter(getApplicationContext(),cards);
+        listView = (CardListView) findViewById(R.id.myList);
         if (listView!=null){
             listView.setAdapter(myAdapter);
         }
@@ -106,6 +121,16 @@ public class MenuActivity extends Activity implements LocationListener{
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         return false;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent e){
+        if(keyCode == KeyEvent.KEYCODE_MENU){
+            if(!drawerLayout.isDrawerOpen(drawerList))
+                drawerLayout.openDrawer(drawerList);
+            return true;
+        }
+        return super.onKeyDown(keyCode, e);
     }
 
     @Override
@@ -208,4 +233,88 @@ public class MenuActivity extends Activity implements LocationListener{
         }
     }*/
 
+    public class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View v, int p, long id){
+            sortCards(p);
+        }
+
+        private void sortCards(int p){
+            drawerList.setItemChecked(p, true);
+            if(p == 0)
+                sortAZNames();
+            if(p == 1)
+                sortZANames();
+            if(p == 2)
+                sortWarrior();
+            if(p == 3)
+                sortClosest();
+            if(p == 4)
+                sortOpened();
+            if(p == 5)
+                resetCards();
+            myAdapter.notifyDataSetChanged();
+            drawerLayout.closeDrawer(drawerList);
+        }
+
+        private void sortAZNames(){
+            Collections.sort(cards, new Comparator<Card>() {
+                @Override
+                public int compare(Card card, Card card2) {
+                    return ((CustomCard) card).info.name.compareTo(((CustomCard) card2).info.name);
+                }
+            });
+
+        }
+
+        private void sortZANames(){
+            Collections.sort(cards, new Comparator<Card>() {
+                @Override
+                public int compare(Card card, Card card2) {
+                    return ((CustomCard) card2).info.name.compareTo(((CustomCard) card).info.name);
+                }
+            });
+
+        }
+
+        private void sortWarrior(){
+            ArrayList<Card> temp = new ArrayList<Card>();
+            for(int i =0; i<cards.size();i++){
+                CustomCard cc = (CustomCard) cards.get(i);
+                if(cc.info.warriorD)
+                    temp.add(cards.get(i));
+            }
+
+            cards.clear();
+            cards.addAll(temp);
+        }
+
+        private void sortClosest(){
+            Collections.sort(cards, new DistComparator());
+        }
+
+        private void sortOpened(){
+            ArrayList<Card> temp = new ArrayList<Card>();
+            for(int i =0; i<cards.size();i++){
+                CustomCard cc = (CustomCard) cards.get(i);
+                if(cc.info.open)
+                    temp.add(cards.get(i));
+            }
+
+            cards.clear();
+            cards.addAll(temp);
+        }
+
+
+        private void resetCards(){
+            cards.clear();
+            cards.addAll(cardsOriginal);
+        }
+
+
+    }
+
+
 }
+
+

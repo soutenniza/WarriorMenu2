@@ -116,14 +116,17 @@ public class CustomCard extends Card {
             if((dayHours.open < currentHour && dayHours.close > currentHour) || dayHours.is24Hour()){
                 openClose.setText("Open Now!");
                 openClose.setTextColor(Color.parseColor("#009900"));
+                info.open = true;
             } else{
                 openClose.setText("Closed.");
                 openClose.setTextColor(Color.parseColor("#D11919"));
+                info.open = false;
             }
 
             if(dayHours.isClosed()){
                 openClose.setText("Closed.");
                 openClose.setTextColor(Color.parseColor("#D11919"));
+                info.open = false;
             }
 
         }
@@ -155,6 +158,7 @@ public class CustomCard extends Card {
             location.setLongitude(-83.069586);*/
             Location.distanceBetween(location.getLatitude(), location.getLongitude(), info.latitude, info.longitude, results);
             float temp = results[0] * 0.0006213f;
+            info.distance = results[0];
             String str = String.format("%.2f", temp);
             button.setText(str + " miles");
             button.setTypeface(typeface);

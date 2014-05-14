@@ -6,4 +6,12 @@
     <string name="action_settings">Settings</string>
     <string name="find_food">Find Food!</string>
     <string name="food_places">Food Places</string>
+    <array name="sorts">
+        <item>A-Z</item>
+        <item>Z-A</item>
+        <item>Warrior Dollars Only</item>
+        <item>Distance: Closest</item>
+        <item>Open Only</item>
+        <item>Reset</item>
+    </array>
 </resources>
