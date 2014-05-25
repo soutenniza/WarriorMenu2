@@ -8,21 +8,15 @@ import android.graphics.Typeface;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.net.Uri;
-import android.util.JsonWriter;
+import android.provider.UserDictionary;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.cengalabs.flatui.FlatUI;
 import com.cengalabs.flatui.views.FlatButton;
 
-import org.json.JSONObject;
-
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,7 +27,7 @@ import it.gmariotti.cardslib.library.internal.Card;
 /**
  * Created by vannguyen on 4/22/14.
  */
-public class CustomCard extends Card {
+public class CustomCardExtended extends CustomCard {
     protected TextView resTitle;
     protected ImageView resImage;
     protected TextView resAddress;
@@ -50,12 +44,12 @@ public class CustomCard extends Card {
     protected FlatButton button;
 
 
-    public CustomCard(Context context, RInfo r, Typeface t, Typeface t2, Location lc){
-        this(context, R.layout.card_thumbnail, r,t, t2, lc);
+    public CustomCardExtended(Context context, RInfo r, Typeface t, Typeface t2, Location lc){
+        this(context, R.layout.card_thumbnail_extended, r,t, t2, lc);
     }
 
-    public CustomCard(Context context, int innerLayout, RInfo r, Typeface t, Typeface t2, Location lc){
-        super(context, innerLayout);
+    public CustomCardExtended(Context context, int innerLayout, RInfo r, Typeface t, Typeface t2, Location lc){
+        super(context, innerLayout, r ,t , t2, lc);
         this.info = r;
         this.typeface = t;
         this.typeface2 = t2;
@@ -69,23 +63,24 @@ public class CustomCard extends Card {
         Date date = new Date();
         Map<Integer, String> dayMapping = new HashMap<Integer, String>();
 
-        String[] days = {"sunday", "monday","tuesday",
-                "wednesday", "thursday", "friday", "saturday"};
+        String[] days = {"Sunday", "Monday","Tuesday",
+                "Wednesday", "Thursday", "Friday", "Saturday"};
         for (int i = 0; i < days.length; i++) {
             dayMapping.put(i, days[i]);
         }
-        resTitle = (TextView) parent.findViewById(R.id.card_title);
-        resImage = (ImageView) parent.findViewById(R.id.card_picture);
-        //resAddress = (TextView) parent.findViewById(R.id.card_address);
-        //resNumber = (TextView) parent.findViewById(R.id.card_number);
-        warriorDollars = (TextView) parent.findViewById(R.id.card_dollar);
-        //resHours = (TextView) parent.findViewById(R.id.card_hours);
-        ratingBar = (RatingBar) parent.findViewById(R.id.card_stars);
-        openClose = (TextView) parent.findViewById(R.id.card_open_close);
-        button = (FlatButton) parent.findViewById(R.id.card_button);
+        resTitle = (TextView) parent.findViewById(R.id.card_title_extended);
+        resImage = (ImageView) parent.findViewById(R.id.card_picture_extended);
+        resAddress = (TextView) parent.findViewById(R.id.card_address_extended);
+        resNumber = (TextView) parent.findViewById(R.id.card_number_extended);
+        warriorDollars = (TextView) parent.findViewById(R.id.card_dollar_extended);
+        resHours = (TextView) parent.findViewById(R.id.card_hours_extended);
+        ratingBar = (RatingBar) parent.findViewById(R.id.card_stars_extended);
+        openClose = (TextView) parent.findViewById(R.id.card_open_close_extended);
+        button = (FlatButton) parent.findViewById(R.id.card_button_extended);
+
 
         String stringDay = dayMapping.get(date.getDay());
-        Day dayHours = info.days.get(stringDay);
+        Day dayHours = info.days.get(stringDay.toLowerCase());
 
 
         if(resTitle != null){
@@ -97,7 +92,7 @@ public class CustomCard extends Card {
             resImage.setImageResource(info.id);
         }
 
-        /*if(resAddress != null){
+        if(resAddress != null){
             resAddress.setText(info.address);
             resAddress.setTypeface(typeface);
         }
@@ -105,7 +100,7 @@ public class CustomCard extends Card {
         if(resNumber != null){
             resNumber.setText(info.number);
             resNumber.setTypeface(typeface);
-        }*/
+        }
 
         if(warriorDollars != null){
             if(info.warriorD)
@@ -135,19 +130,34 @@ public class CustomCard extends Card {
 
         }
 
-        /*if(resHours != null){
+        if(resHours != null){
             String hours = new String();
+            hours += "Hours: \n";
+            /*
             if(dayHours.isClosed()) {
                 hours = "Closed Today.";
             } else if(dayHours.is24Hour()) {
                 hours = "Open 24 hours.";
             } else {
                 hours = "Hours: " + dayHours.openTimeString() + " - " + dayHours.closeTimeString();
+            }*/
+
+            for(int i = 0; i < 7; i++){
+                Day hour = info.days.get(days[i].toLowerCase());
+
+                hours = hours + days[i] + ": ";
+                if(hour.isClosed()) {
+                    hours += "Closed\n";
+                } else if(dayHours.is24Hour()) {
+                    hours += "Open 24 hours.\n";
+                } else {
+                    hours = hours + hour.openTimeString() + " - " + hour.closeTimeString() + "\n";
+                }
             }
 
             resHours.setText(hours);
             resHours.setTypeface(typeface);
-        }*/
+        }
 
         if(ratingBar != null){
             ratingBar.setNumStars(5);
@@ -160,20 +170,17 @@ public class CustomCard extends Card {
             float[] results = new float[10];
             /*location.setLatitude(42.361525); //Mock Location
             location.setLongitude(-83.069586);*/
-
             Location.distanceBetween(location.getLatitude(), location.getLongitude(), info.latitude, info.longitude, results);
             float temp = results[0] * 0.0006213f;
             info.distance = results[0];
-            //String str = String.format("%.2f", temp);
             button.setText("Directions");
             button.setTypeface(typeface);
             info.url = "http://maps.google.com/maps?saddr=" + location.getLatitude() + "," + location.getLongitude();
             info.url = info.url + "&daddr=" + info.name + "+"+info.address;
-            //+ info.latitude + "," + info.longitude;
             button.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(info.url));
+                    Intent intent = new Intent(Intent.ACTION_VIEW,  Uri.parse(info.url));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getContext().startActivity(intent);
                 }
@@ -188,22 +195,4 @@ public class CustomCard extends Card {
         return context.getResources().getIdentifier("drawable/" + url, null, context.getPackageName());
     }
 
-    private String mapsUrl(Location lc, RInfo rInfo){
-        String origin = "origin=" + lc.getLatitude() + "," + lc.getLongitude();
-        String dest = "destination=" + rInfo.latitude + "," + rInfo.longitude;
-        String sensor = "sensor=false";
-        String url = "https://maps.googleapis.com/maps/api/directions/json?" + origin + "&" + dest + "&" + sensor;
-        return url;
-    }
-
-    private InputStream getStream(String strUrl){
-        try{
-            URL url = new URL(strUrl);
-            URLConnection urlConnection = url.openConnection();
-            urlConnection.setConnectTimeout(1000);
-            return  urlConnection.getInputStream();
-        }catch(Exception e){
-            return null;
-        }
-    }
 }

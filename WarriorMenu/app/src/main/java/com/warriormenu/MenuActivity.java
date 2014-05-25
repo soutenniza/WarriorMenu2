@@ -2,9 +2,11 @@ package com.warriormenu;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -23,7 +25,7 @@ import android.widget.TextView;
 import android.util.Log;
 
 import com.cengalabs.flatui.FlatUI;
-import com.cengalabs.flatui.views.FlatButton;
+import com.google.gson.Gson;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -71,7 +73,7 @@ public class MenuActivity extends Activity implements LocationListener{
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,0,this);
-        TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
+        final TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(typeface);
         FlatUI.initDefaultValues(this);
         FlatUI.setDefaultTheme(FlatUI.GRASS);
@@ -84,7 +86,7 @@ public class MenuActivity extends Activity implements LocationListener{
 
 
         try{
-            Thread.sleep(4000);
+            Thread.sleep(5000);
         }catch(Exception ex) {
             Log.d("waitcatch", "yes");
         }
@@ -99,6 +101,18 @@ public class MenuActivity extends Activity implements LocationListener{
            CustomCard card = new CustomCard(this, restaurants.get(i), typeface, typeface2, myLocation);
            card.setId(card.info.address);
            card.setShadow(true);
+           card.setSwipeable(true);
+
+            card.setOnClickListener(new Card.OnCardClickListener() {
+                @Override
+                public void onClick(Card card, View view) {
+                    CustomCardExtended card2 = new CustomCardExtended(getBaseContext(), ((CustomCard) card).info, typeface, typeface2, myLocation);
+                    Intent intent = new Intent(MenuActivity.this, SingleActivity.class);
+                    intent.putExtras(bundling(((CustomCard) card).info));
+                    startActivity(intent);
+
+                }
+            });
            //card.resImage.setImageResource(imageID(this, url));
            //card.setSwipeable(true);
            cards.add(card);
@@ -107,6 +121,9 @@ public class MenuActivity extends Activity implements LocationListener{
         cardsOriginal = new ArrayList<Card>(cards);
         myAdapter = new CardArrayAdapter(getApplicationContext(),cards);
         listView = (CardListView) findViewById(R.id.myList);
+        listView.setDividerHeight(10);
+
+
         if (listView!=null){
             listView.setAdapter(myAdapter);
         }
@@ -314,6 +331,17 @@ public class MenuActivity extends Activity implements LocationListener{
 
     }
 
+    public Bundle bundling(RInfo rInfo){
+        Bundle b = new Bundle();
+        Gson gson = new Gson();
+        ArrayList<RInfo> arrayList = new ArrayList<RInfo>();
+        arrayList.add(rInfo);
+        String json = gson.toJson(arrayList);
+        b.putString("info", json);
+        b.putDouble("lat", myLocation.getLatitude());
+        b.putDouble("long", myLocation.getLongitude());
+        return b;
+    }
 
 }
 
