@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +28,7 @@ import it.gmariotti.cardslib.library.view.CardView;
 
 public class SingleActivity extends Activity {
 
-private Location myLocation;
+    private Location myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +44,13 @@ private Location myLocation;
 
         ArrayList<Card> cards = new ArrayList<Card>();
         CustomCardExtended card = new CustomCardExtended(getApplicationContext(), r, typeface, typeface2, myLocation);
-        cards.add(card);
+        /*cards.add(card);
         CardArrayAdapter myAdapter = new CardArrayAdapter(getApplicationContext(), cards);
         ListView listView = (CardListView) findViewById(R.id.myList_single);
         if(listView != null)
-            listView.setAdapter(myAdapter);
+            listView.setAdapter(myAdapter);*/
+        CardView cardView = (CardView) findViewById(R.id.card_single);
+        cardView.setCard(card);
 
 
     }
@@ -57,6 +61,7 @@ private Location myLocation;
         
         return false;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

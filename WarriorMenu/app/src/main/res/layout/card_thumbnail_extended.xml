@@ -60,19 +60,48 @@
         android:text="Warrior Dollhairs"
         android:textSize="@dimen/address_size"
         android:textColor="@color/black"/>
-    <RatingBar
-        android:id="@+id/card_stars_extended"
-        android:layout_below="@id/card_dollar_extended"
-        android:layout_toRightOf="@id/card_picture_extended"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/card_hours_extended"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:layout_below="@id/card_picture_extended"
+        android:layout_marginLeft="5dp"/>
+    <RatingBar
+        android:id="@+id/card_stars_extended"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@id/card_picture_extended"
+        android:layout_above="@id/card_hours_extended"
+        android:layout_height="wrap_content"
         android:numStars="5"
+        style="?android:attr/ratingBarStyleIndicator"
         android:rating="0"
         android:isIndicator="true"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card_price_extended"
+        android:layout_below="@id/card_hours_extended"
+        android:text="Price: $$$$"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:layout_marginLeft="5dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card_cuisine_extended"
+        android:layout_below="@id/card_hours_extended"
+        android:layout_toRightOf="@id/card_price_extended"
+        android:text="Cuisine: FOOOOOODDDD"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:layout_marginLeft="5dp"/>
+
     <com.cengalabs.flatui.views.FlatButton
         android:id="@+id/card_button_extended"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/card_hours_extended"
         android:layout_alignParentRight="true"
         android:layout_width="60dp"
         android:layout_height="35dp"
@@ -85,14 +114,23 @@
         flatui:borderWidth="0dp"
         flatui:cornerRadius="0dp"
         flatui:size="20dp"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/card_hours_extended"
-        android:textSize="14dp"
-        android:textColor="@color/black"
-        android:layout_below="@id/card_picture_extended"
+        android:id="@+id/card_comment_extended"
+        android:layout_below="@+id/card_price_extended"
+        android:text="Comments: "
+        android:textColor="@color/wayne_green"
+        android:textSize="20dp"
         android:layout_marginLeft="5dp"/>
 
+    <it.gmariotti.cardslib.library.view.CardListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card_extended_listView"
+        android:layout_below="@id/card_comment_extended"
+        >
 
+    </it.gmariotti.cardslib.library.view.CardListView>
 </RelativeLayout>

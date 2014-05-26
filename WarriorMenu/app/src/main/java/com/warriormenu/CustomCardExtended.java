@@ -12,17 +12,21 @@ import android.provider.UserDictionary;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.cengalabs.flatui.views.FlatButton;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
+import it.gmariotti.cardslib.library.view.CardListView;
 
 /**
  * Created by vannguyen on 4/22/14.
@@ -42,6 +46,7 @@ public class CustomCardExtended extends CustomCard {
     protected Typeface typeface2;
     protected Location location;
     protected FlatButton button;
+    protected ListView cardList;
 
 
     public CustomCardExtended(Context context, RInfo r, Typeface t, Typeface t2, Location lc){
@@ -77,6 +82,7 @@ public class CustomCardExtended extends CustomCard {
         ratingBar = (RatingBar) parent.findViewById(R.id.card_stars_extended);
         openClose = (TextView) parent.findViewById(R.id.card_open_close_extended);
         button = (FlatButton) parent.findViewById(R.id.card_button_extended);
+        cardList = (CardListView) parent.findViewById(R.id.card_extended_listView);
 
 
         String stringDay = dayMapping.get(date.getDay());
@@ -160,7 +166,6 @@ public class CustomCardExtended extends CustomCard {
         }
 
         if(ratingBar != null){
-            ratingBar.setNumStars(5);
             ratingBar.setRating((float)info.rating);
             LayerDrawable layer = (LayerDrawable) ratingBar.getProgressDrawable();
             layer.getDrawable(2).setColorFilter(Color.parseColor("#ffcc33"), PorterDuff.Mode.SRC_ATOP);
@@ -185,9 +190,21 @@ public class CustomCardExtended extends CustomCard {
                     getContext().startActivity(intent);
                 }
             });
+        }
 
+        if(cardList != null){
+            ArrayList<Card> cards = new ArrayList<Card>();
+            CommentCard card = new CommentCard(mContext);
+            card.setBackgroundResourceId(R.color.lightgreytan);
+            cards.add(card);
+            cards.add(card);
+            cards.add(card);
+            cards.add(card);
+            cardList.setMinimumHeight(100);
 
+            CardArrayAdapter adapter = new CardArrayAdapter(mContext, cards);
 
+            cardList.setAdapter(adapter);
         }
 
     }
