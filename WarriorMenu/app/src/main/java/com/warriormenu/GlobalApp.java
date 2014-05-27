@@ -1,0 +1,24 @@
+package com.warriormenu;
+
+import android.app.Application;
+
+import java.util.Vector;
+
+/**
+ * Created by vannguyen on 5/27/14.
+ */
+public class GlobalApp extends Application {
+    private Vector<RInfo> restaurants;
+
+    public GlobalApp(){
+        restaurants = new Vector<RInfo>();
+    }
+
+    public Vector<RInfo> getRestaurants(){
+        return restaurants;
+    }
+
+    public void setRestaurants(Vector<RInfo> r){
+        restaurants.addAll(r);
+    }
+}

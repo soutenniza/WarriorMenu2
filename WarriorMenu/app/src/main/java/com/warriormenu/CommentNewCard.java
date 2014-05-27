@@ -30,14 +30,16 @@ public class CommentNewCard extends Card{
     public String name;
     public String review;
     public float rating;
+    public RInfo info;
 
 
-    public CommentNewCard(Context context){
-        this(context, R.layout.card_comment_new);
+    public CommentNewCard(Context context, RInfo rInfo){
+        this(context, R.layout.card_comment_new, rInfo);
     }
 
-    public CommentNewCard(Context context, int innerLayout){
+    public CommentNewCard(Context context, int innerLayout, RInfo rInfo){
         super(context, innerLayout);
+        this.info = rInfo;
     }
 
 
@@ -52,9 +54,9 @@ public class CommentNewCard extends Card{
             submitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    name = nameInput.getText().toString();
-                    review = reviewInput.getText().toString();
-                    rating = ratingBar.getRating();
+                    info.names.add(nameInput.getText().toString());
+                    info.reviews.add(reviewInput.getText().toString());
+                    info.ratings.add(ratingBar.getRating());
                 }
             });
         }

@@ -67,6 +67,7 @@ public class MenuActivity extends Activity implements LocationListener{
     private CardArrayAdapter myAdapter;
     private CardListView listView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,11 +116,9 @@ public class MenuActivity extends Activity implements LocationListener{
             card.setOnClickListener(new Card.OnCardClickListener() {
                 @Override
                 public void onClick(Card card, View view) {
-                    CustomCardExtended card2 = new CustomCardExtended(getBaseContext(), ((CustomCard) card).info, typeface, typeface2, myLocation);
                     Intent intent = new Intent(MenuActivity.this, SingleActivity.class);
                     intent.putExtras(bundling(((CustomCard) card).info));
                     startActivity(intent);
-
                 }
             });
            //card.resImage.setImageResource(imageID(this, url));
@@ -215,7 +214,7 @@ public class MenuActivity extends Activity implements LocationListener{
         String strFile = null;
         InputStream inFile = getResources().openRawResource(R.raw.restaurants);
         try{
-            URL url = new URL("http://warrior-dev.cfapps.io/restaurants");
+            URL url = new URL("http://warrior-prod.cfapps.io/restaurants");
             HttpURLConnection con = (HttpURLConnection) url
                     .openConnection();
             con.connect();
@@ -248,6 +247,9 @@ public class MenuActivity extends Activity implements LocationListener{
 
                     restaurant.days.put(days[j],day);
                 }
+                restaurant.names = new Vector<String>();
+                restaurant.reviews = new Vector<String>();
+                restaurant.ratings = new Vector<Float>();
                 restaurantArray.add(restaurant);
 
             }

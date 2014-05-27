@@ -202,9 +202,11 @@ public class CustomCardExtended extends CustomCard {
 
         if(cardList != null){
             cards = new ArrayList<Card>();
-            CommentCard card = new CommentCard(mContext);
-            card.setBackgroundResourceId(R.color.lightgreytan);
-            cards.add(card);
+            for(int i = 0; i < info.names.size(); i++){
+                CommentCard card = new CommentCard(mContext, info.names.get(i), info.reviews.get(i), info.ratings.get(i));
+                card.setBackgroundResourceId(R.color.lightgreytan);
+                cards.add(card);
+            }
             CardArrayAdapter adapter = new CardArrayAdapter(mContext, cards);
             cardList.setAdapter(adapter);
         }

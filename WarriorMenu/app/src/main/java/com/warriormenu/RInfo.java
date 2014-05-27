@@ -3,6 +3,7 @@ package com.warriormenu;
 import android.widget.ImageView;
 
 import java.util.Map;
+import java.util.Vector;
 
 /**
  * Created by vannguyen on 5/7/14.
@@ -23,5 +24,8 @@ public class RInfo {
     public boolean open;
     public String cuisine;
     public int price;
+    public Vector<String> names;
+    public Vector<String> reviews;
+    public Vector<Float> ratings;
 }
 
