@@ -171,18 +171,6 @@ public class MenuActivity extends Activity implements LocationListener{
     }
 
 
-    private String inputStreamToString(InputStream is) throws IOException {
-        StringBuffer sBuffer = new StringBuffer();
-        DataInputStream dataIO = new DataInputStream(is);
-        String strLine = null;
-        while((strLine = dataIO.readLine())  != null){
-            sBuffer.append(strLine + "\n");
-        }
-
-        dataIO.close();
-        return sBuffer.toString();
-    }
-
     private String readStream(InputStream in) {
         BufferedReader reader = null;
         StringBuffer sBuffer = new StringBuffer();
@@ -247,7 +235,7 @@ public class MenuActivity extends Activity implements LocationListener{
                     comment.restaurant_id = jsonComment.getInt("restaurant_id");
                     comment.comment = jsonComment.getString("comment");
                     comment.name = jsonComment.getString("name");
-                    comment.rating = jsonComment.getInt("rating");
+                    comment.rating = jsonComment.getDouble("rating");
                     restaurant.comments.add(comment);
                 }
                 for (int j = 0; j < days.length; j++) {

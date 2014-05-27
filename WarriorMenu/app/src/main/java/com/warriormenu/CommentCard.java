@@ -37,9 +37,9 @@ public class CommentCard extends Card {
     protected Typeface typeface2;
     protected String name;
     protected String review;
-    protected float rating;
+    protected double rating;
 
-    public CommentCard(Context context, String n, String r, float rating){
+    public CommentCard(Context context, String n, String r, double rating){
         this(context);
         this.name = n;
         this.review = r;
@@ -70,7 +70,7 @@ public class CommentCard extends Card {
         }
 
         if(ratingBar != null){
-            ratingBar.setRating(rating);
+            ratingBar.setRating((float)rating);
             LayerDrawable layer = (LayerDrawable) ratingBar.getProgressDrawable();
             layer.getDrawable(2).setColorFilter(Color.parseColor("#0b4f45"), PorterDuff.Mode.SRC_ATOP);
         }
