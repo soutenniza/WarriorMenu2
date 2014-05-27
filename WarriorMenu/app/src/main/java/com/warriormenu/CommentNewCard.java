@@ -20,7 +20,7 @@ import it.gmariotti.cardslib.library.internal.Card;
 /**
  * Created by vannguyen on 4/22/14.
  */
-public class CommentNewCard extends Card {
+public class CommentNewCard extends Card{
     public EditText nameInput;
     public EditText reviewInput;
     public RatingBar ratingBar;
@@ -30,13 +30,7 @@ public class CommentNewCard extends Card {
     public String name;
     public String review;
     public float rating;
-    public View.OnClickListener onClickListener;
 
-
-    public CommentNewCard(Context context, View.OnClickListener oc){
-        this(context);
-        this.onClickListener = oc;
-    }
 
     public CommentNewCard(Context context){
         this(context, R.layout.card_comment_new);
@@ -55,9 +49,15 @@ public class CommentNewCard extends Card {
         submitButton = (FlatButton) parent.findViewById(R.id.card_comment_submit);
 
         if(submitButton != null){
-            submitButton.setOnClickListener(onClickListener);
+            submitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    name = nameInput.getText().toString();
+                    review = reviewInput.getText().toString();
+                    rating = ratingBar.getRating();
+                }
+            });
         }
-
         if(ratingBar != null){
             LayerDrawable layer = (LayerDrawable) ratingBar.getProgressDrawable();
             layer.getDrawable(2).setColorFilter(Color.parseColor("#0b4f45"), PorterDuff.Mode.SRC_ATOP);

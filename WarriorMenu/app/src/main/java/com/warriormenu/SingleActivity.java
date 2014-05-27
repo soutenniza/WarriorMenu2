@@ -28,10 +28,11 @@ import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
 import it.gmariotti.cardslib.library.view.CardView;
 
-public class SingleActivity extends Activity {
+public class SingleActivity extends Activity{
 
     private Location myLocation;
     private CustomCardExtended customCardExtended;
+    private TextView mainTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,28 +43,19 @@ public class SingleActivity extends Activity {
         RInfo r = unBundling(this.getIntent().getExtras());
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Roboto-LightItalic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getAssets(), "Roboto-BoldCondensedItalic.ttf");
-        final TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
+        mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(typeface);
 
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                CommentNewCard commentNewCard = customCardExtended.getCommentNewCard();
-                String name = commentNewCard.nameInput.getText().toString();
-                String review = customCardExtended.commentNewCard.reviewInput.getText().toString();
-                Float rating = customCardExtended.commentNewCard.ratingBar.getRating();
-                customCardExtended.addNewComment(name, review, rating);
-                mainTitle.setText(name);
-            }
-        };
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         ArrayList<Card> cards = new ArrayList<Card>();
-        customCardExtended = new CustomCardExtended(getApplicationContext(), r, typeface, typeface2, myLocation, onClickListener);
+        customCardExtended = new CustomCardExtended(getApplicationContext(), r, typeface, typeface2, myLocation);
         CardView cardView = (CardView) findViewById(R.id.card_single);
         cardView.setCard(customCardExtended);
 
+        CommentNewCard commentNewCard = new CommentNewCard(getApplicationContext());
+        commentNewCard.setBackgroundResourceId(R.color.lightgreytan);
+        customCardExtended.addNewComment(commentNewCard);
     }
 
 
@@ -96,5 +88,4 @@ public class SingleActivity extends Activity {
         myLocation.setLongitude(longitude);
         return arrayList.get(0);
     }
-
 }

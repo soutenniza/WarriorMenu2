@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.cengalabs.flatui.views.FlatButton;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,10 +49,11 @@ public class CustomCardExtended extends CustomCard {
     protected Typeface typeface2;
     protected Location location;
     protected FlatButton button;
+    protected TextView resCuisine;
+    protected TextView resPrice;
     public ListView cardList;
     public ArrayList<Card> cards;
     public CommentNewCard commentNewCard;
-    public View.OnClickListener onClickListener;
 
     public CustomCardExtended(Context context, int innerLayout, RInfo r, Typeface t, Typeface t2, Location lc){
         super(context, innerLayout, r ,t , t2, lc);
@@ -62,15 +65,6 @@ public class CustomCardExtended extends CustomCard {
 
     public CustomCardExtended(Context context, RInfo r, Typeface t, Typeface t2, Location lc){
         this(context, R.layout.card_thumbnail_extended, r,t, t2, lc);
-    }
-
-    public CustomCardExtended(Context context, RInfo r, Typeface t, Typeface t2, Location lc, View.OnClickListener oc){
-        this(context, R.layout.card_thumbnail_extended, r,t, t2, lc, oc);
-    }
-
-    public CustomCardExtended(Context context, int innerLayout, RInfo r, Typeface t, Typeface t2, Location lc, View.OnClickListener oc){
-        this(context, innerLayout, r, t, t2, lc);
-        this.onClickListener = oc;
     }
 
 
@@ -95,6 +89,8 @@ public class CustomCardExtended extends CustomCard {
         openClose = (TextView) parent.findViewById(R.id.card_open_close_extended);
         button = (FlatButton) parent.findViewById(R.id.card_button_extended);
         cardList = (CardListView) parent.findViewById(R.id.card_extended_listView);
+        resCuisine = (TextView) parent.findViewById(R.id.card_cuisine_extended);
+        resPrice = (TextView) parent.findViewById(R.id.card_price_extended);
 
 
         String stringDay = dayMapping.get(date.getDay());
@@ -208,15 +204,22 @@ public class CustomCardExtended extends CustomCard {
             cards = new ArrayList<Card>();
             CommentCard card = new CommentCard(mContext);
             card.setBackgroundResourceId(R.color.lightgreytan);
-            commentNewCard = new CommentNewCard(mContext, onClickListener);
-            commentNewCard.setBackgroundResourceId(R.color.lightgreytan);
             cards.add(card);
-            cards.add(card);
-            cards.add(card);
-            cards.add(commentNewCard);
-            cardList.setMinimumHeight(100);
             CardArrayAdapter adapter = new CardArrayAdapter(mContext, cards);
             cardList.setAdapter(adapter);
+        }
+
+        if(resCuisine != null){
+            resCuisine.setText("Cuisine: " + info.cuisine);
+            resCuisine.setTypeface(typeface);
+        }
+
+        if(resPrice != null){
+            String p = "Price: ";
+            for(int i = 0; i < info.price; i++)
+                p+= "$";
+            resPrice.setText(p);
+            resPrice.setTypeface(typeface);
         }
 
     }
@@ -224,13 +227,8 @@ public class CustomCardExtended extends CustomCard {
         return context.getResources().getIdentifier("drawable/" + url, null, context.getPackageName());
     }
 
-    public CommentNewCard getCommentNewCard(){
-        return (CommentNewCard) cardList.
-    }
-
-    public void addNewComment(String n, String r, float rating){
-        CommentCard newCard = new CommentCard(mContext, n, r, rating);
-        cards.add(newCard);
+    public void addNewComment(Card card){
+        cards.add(card);
         CardArrayAdapter adapter = new CardArrayAdapter(mContext, cards);
         cardList.setAdapter(adapter);
     }

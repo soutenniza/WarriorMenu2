@@ -238,6 +238,8 @@ public class MenuActivity extends Activity implements LocationListener{
                 restaurant.rating = row.getDouble("rating");
                 restaurant.number = row.getString("number");
                 restaurant.photoloc = row.getString("photo_loc");
+                restaurant.cuisine = row.getString("cuisine");
+                restaurant.price = row.getInt("price");
                 for (int j = 0; j < days.length; j++) {
                     Day day = new Day();
                     JSONObject dayObj = hours.getJSONObject(days[j]);

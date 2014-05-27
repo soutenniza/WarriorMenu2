@@ -21,5 +21,7 @@ public class RInfo {
     public String photoloc;
     public int id;
     public boolean open;
+    public String cuisine;
+    public int price;
 }
 
