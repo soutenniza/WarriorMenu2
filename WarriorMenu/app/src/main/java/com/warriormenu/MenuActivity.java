@@ -13,6 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -27,10 +28,15 @@ import android.util.Log;
 import com.cengalabs.flatui.FlatUI;
 import com.google.gson.Gson;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -65,6 +71,9 @@ public class MenuActivity extends Activity implements LocationListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        StrictMode.ThreadPolicy policy =
+                new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         restaurants = intRests();
         cards = new ArrayList<Card>();
@@ -175,6 +184,30 @@ public class MenuActivity extends Activity implements LocationListener{
         return sBuffer.toString();
     }
 
+    private String readStream(InputStream in) {
+        BufferedReader reader = null;
+        StringBuffer sBuffer = new StringBuffer();
+        String strLine = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(in));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                sBuffer.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sBuffer.toString();
+    }
+
     private Vector<RInfo> intRests(){
         Vector<RInfo> restaurantArray = new Vector<RInfo>();
         String array;
@@ -182,7 +215,12 @@ public class MenuActivity extends Activity implements LocationListener{
         String strFile = null;
         InputStream inFile = getResources().openRawResource(R.raw.restaurants);
         try{
-            strFile = inputStreamToString(inFile);
+            URL url = new URL("http://warrior-dev.cfapps.io/restaurants");
+            HttpURLConnection con = (HttpURLConnection) url
+                    .openConnection();
+            con.connect();
+            strFile = readStream(con.getInputStream());
+
             JSONArray restaurants = new JSONArray(strFile);
             for (int i = 0; i < restaurants.length(); i++) {
                 JSONObject row = restaurants.getJSONObject(i);
