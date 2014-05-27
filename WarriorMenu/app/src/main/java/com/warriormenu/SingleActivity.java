@@ -33,6 +33,7 @@ public class SingleActivity extends Activity{
     private Location myLocation;
     private CustomCardExtended customCardExtended;
     private TextView mainTitle;
+    public RInfo r;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +41,15 @@ public class SingleActivity extends Activity{
         setContentView(R.layout.activity_single);
 
         myLocation = new Location("temp");
-        RInfo r = unBundling(this.getIntent().getExtras());
+        r = unBundling(this.getIntent().getExtras());
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Roboto-LightItalic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getAssets(), "Roboto-BoldCondensedItalic.ttf");
         mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(typeface);
+
+        r.names.add("Van");
+        r.reviews.add("I love to eat pies all day even though I cant move any part of of my body. How did I type this?");
+        r.ratings.add(1.f);
 
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -53,9 +58,16 @@ public class SingleActivity extends Activity{
         CardView cardView = (CardView) findViewById(R.id.card_single);
         cardView.setCard(customCardExtended);
 
-        CommentNewCard commentNewCard = new CommentNewCard(getApplicationContext());
+        CommentNewCard commentNewCard = new CommentNewCard(getApplicationContext(), r);
         commentNewCard.setBackgroundResourceId(R.color.lightgreytan);
         customCardExtended.addNewComment(commentNewCard);
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(SingleActivity.this, MenuActivity.class);
+        intent.putExtras(bundling(r));
+        startActivity(intent);
     }
 
 
@@ -87,5 +99,17 @@ public class SingleActivity extends Activity{
         myLocation.setLatitude(latitude);
         myLocation.setLongitude(longitude);
         return arrayList.get(0);
+    }
+
+    public Bundle bundling(RInfo rInfo){
+        Bundle b = new Bundle();
+        Gson gson = new Gson();
+        ArrayList<RInfo> arrayList = new ArrayList<RInfo>();
+        arrayList.add(rInfo);
+        String json = gson.toJson(arrayList);
+        b.putString("info", json);
+        b.putDouble("lat", myLocation.getLatitude());
+        b.putDouble("long", myLocation.getLongitude());
+        return b;
     }
 }
