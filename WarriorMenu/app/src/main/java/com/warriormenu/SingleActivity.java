@@ -10,10 +10,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cengalabs.flatui.views.FlatButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -29,6 +31,7 @@ import it.gmariotti.cardslib.library.view.CardView;
 public class SingleActivity extends Activity {
 
     private Location myLocation;
+    private CustomCardExtended customCardExtended;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +45,24 @@ public class SingleActivity extends Activity {
         final TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(typeface);
 
-        ArrayList<Card> cards = new ArrayList<Card>();
-        CustomCardExtended card = new CustomCardExtended(getApplicationContext(), r, typeface, typeface2, myLocation);
-        /*cards.add(card);
-        CardArrayAdapter myAdapter = new CardArrayAdapter(getApplicationContext(), cards);
-        ListView listView = (CardListView) findViewById(R.id.myList_single);
-        if(listView != null)
-            listView.setAdapter(myAdapter);*/
-        CardView cardView = (CardView) findViewById(R.id.card_single);
-        cardView.setCard(card);
+        View.OnClickListener onClickListener = new View.OnClickListener() {
 
+            @Override
+            public void onClick(View view) {
+                CommentNewCard commentNewCard = customCardExtended.getCommentNewCard();
+                String name = commentNewCard.nameInput.getText().toString();
+                String review = customCardExtended.commentNewCard.reviewInput.getText().toString();
+                Float rating = customCardExtended.commentNewCard.ratingBar.getRating();
+                customCardExtended.addNewComment(name, review, rating);
+                mainTitle.setText(name);
+            }
+        };
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        ArrayList<Card> cards = new ArrayList<Card>();
+        customCardExtended = new CustomCardExtended(getApplicationContext(), r, typeface, typeface2, myLocation, onClickListener);
+        CardView cardView = (CardView) findViewById(R.id.card_single);
+        cardView.setCard(customCardExtended);
 
     }
 

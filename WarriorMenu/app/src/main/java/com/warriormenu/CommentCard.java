@@ -35,7 +35,16 @@ public class CommentCard extends Card {
     protected RatingBar ratingBar;
     protected Typeface typeface;
     protected Typeface typeface2;
+    protected String name;
+    protected String review;
+    protected float rating;
 
+    public CommentCard(Context context, String n, String r, float rating){
+        this(context);
+        this.name = n;
+        this.review = r;
+        this.rating = rating;
+    }
 
     public CommentCard(Context context){
         this(context, R.layout.card_comment);
@@ -53,14 +62,15 @@ public class CommentCard extends Card {
         ratingBar = (RatingBar) parent.findViewById(R.id.card_comment_stars);
 
         if(commentUser != null){
-            commentUser.setText("Van Nguyen");
+                commentUser.setText(name);
         }
 
         if(commentComment != null){
-            commentComment.setText("Very delicious pies! The service was top notch! I would go there everyday if I didn't gain half a pound everytime I go there.");
+                commentComment.setText(review);
         }
 
         if(ratingBar != null){
+            ratingBar.setRating(rating);
             LayerDrawable layer = (LayerDrawable) ratingBar.getProgressDrawable();
             layer.getDrawable(2).setColorFilter(Color.parseColor("#0b4f45"), PorterDuff.Mode.SRC_ATOP);
         }

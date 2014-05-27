@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="fill_parent">
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    xmlns:flatui="http://schemas.android.com/apk/res-auto">
         <!-- Use same ID to use built-in features -->
-        <TextView
+        <com.cengalabs.flatui.views.FlatEditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/card_comment_username"
-            android:text="Van Nguyen"
-            android:textSize="15dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:textColor="@color/wayne_green"
-            android:layout_marginLeft="2dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/card_comment_comment"
-            android:layout_below="@+id/card_comment_username"
-            android:text="Very delicious pies"
-            android:textSize="10dp"
-            android:textColor="@color/black"
-            android:layout_marginLeft="10dp"/>
+            android:hint="Name"
+            android:id="@+id/card_comment_name_new"
+            flatui:theme="@array/custom_theme"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="2dp"
+            flatui:cornerRadius="0dp"
+            android:singleLine="true"
+            flatui:fieldStyle="box"/>
+        <com.cengalabs.flatui.views.FlatEditText
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:hint="Your review"
+            android:minLines="2"
+            android:maxLines="4"
+            android:layout_marginLeft="2dp"
+            android:id="@+id/card_comment_comment_new"
+            android:layout_below="@id/card_comment_name_new"
+            flatui:fieldStyle="box"
+            flatui:cornerRadius="0dp"
+            flatui:theme="@array/custom_theme"/>
         <RatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,10 +34,24 @@
             android:layout_marginTop="2dp"
             android:layout_marginRight="2dp"
             android:layout_alignParentTop="true"
-            style="?android:attr/ratingBarStyleSmall"
-            android:id="@+id/card_comment_stars"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:id="@+id/card_comment_stars_new"
+            android:isIndicator="false"
             android:rating="2"
             android:numStars="5"
             />
+        <com.cengalabs.flatui.views.FlatButton
+            android:id="@+id/card_comment_submit"
+            android:layout_below="@id/card_comment_comment_new"
+            android:layout_alignParentRight="true"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:text="Submit"
+            android:textColor="@color/wayne_yellow"
+            android:textSize="12dp"
+            flatui:theme="@array/custom_theme"
+            flatui:borderWidth="0dp"
+            flatui:cornerRadius="0dp"
+            flatui:size="20dp"/>
 
 </RelativeLayout>

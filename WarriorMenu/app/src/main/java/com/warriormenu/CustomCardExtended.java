@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.provider.UserDictionary;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -46,12 +47,10 @@ public class CustomCardExtended extends CustomCard {
     protected Typeface typeface2;
     protected Location location;
     protected FlatButton button;
-    protected ListView cardList;
-
-
-    public CustomCardExtended(Context context, RInfo r, Typeface t, Typeface t2, Location lc){
-        this(context, R.layout.card_thumbnail_extended, r,t, t2, lc);
-    }
+    public ListView cardList;
+    public ArrayList<Card> cards;
+    public CommentNewCard commentNewCard;
+    public View.OnClickListener onClickListener;
 
     public CustomCardExtended(Context context, int innerLayout, RInfo r, Typeface t, Typeface t2, Location lc){
         super(context, innerLayout, r ,t , t2, lc);
@@ -59,6 +58,19 @@ public class CustomCardExtended extends CustomCard {
         this.typeface = t;
         this.typeface2 = t2;
         this.location = lc;
+    }
+
+    public CustomCardExtended(Context context, RInfo r, Typeface t, Typeface t2, Location lc){
+        this(context, R.layout.card_thumbnail_extended, r,t, t2, lc);
+    }
+
+    public CustomCardExtended(Context context, RInfo r, Typeface t, Typeface t2, Location lc, View.OnClickListener oc){
+        this(context, R.layout.card_thumbnail_extended, r,t, t2, lc, oc);
+    }
+
+    public CustomCardExtended(Context context, int innerLayout, RInfo r, Typeface t, Typeface t2, Location lc, View.OnClickListener oc){
+        this(context, innerLayout, r, t, t2, lc);
+        this.onClickListener = oc;
     }
 
 
@@ -193,17 +205,17 @@ public class CustomCardExtended extends CustomCard {
         }
 
         if(cardList != null){
-            ArrayList<Card> cards = new ArrayList<Card>();
+            cards = new ArrayList<Card>();
             CommentCard card = new CommentCard(mContext);
             card.setBackgroundResourceId(R.color.lightgreytan);
+            commentNewCard = new CommentNewCard(mContext, onClickListener);
+            commentNewCard.setBackgroundResourceId(R.color.lightgreytan);
             cards.add(card);
             cards.add(card);
             cards.add(card);
-            cards.add(card);
+            cards.add(commentNewCard);
             cardList.setMinimumHeight(100);
-
             CardArrayAdapter adapter = new CardArrayAdapter(mContext, cards);
-
             cardList.setAdapter(adapter);
         }
 
@@ -212,4 +224,14 @@ public class CustomCardExtended extends CustomCard {
         return context.getResources().getIdentifier("drawable/" + url, null, context.getPackageName());
     }
 
+    public CommentNewCard getCommentNewCard(){
+        return (CommentNewCard) cardList.
+    }
+
+    public void addNewComment(String n, String r, float rating){
+        CommentCard newCard = new CommentCard(mContext, n, r, rating);
+        cards.add(newCard);
+        CardArrayAdapter adapter = new CardArrayAdapter(mContext, cards);
+        cardList.setAdapter(adapter);
+    }
 }
