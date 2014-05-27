@@ -23,9 +23,7 @@ public class RInfo {
     public int id;
     public boolean open;
     public String cuisine;
-    public int price;
-    public Vector<String> names;
-    public Vector<String> reviews;
-    public Vector<Float> ratings;
+    public String price;
+    public Vector<Comment> comments;
 }
 

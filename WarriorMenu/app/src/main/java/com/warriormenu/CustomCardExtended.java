@@ -217,9 +217,7 @@ public class CustomCardExtended extends CustomCard {
         }
 
         if(resPrice != null){
-            String p = "Price: ";
-            for(int i = 0; i < info.price; i++)
-                p+= "$";
+            String p = "Price: " + info.price;
             resPrice.setText(p);
             resPrice.setTypeface(typeface);
         }

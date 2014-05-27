@@ -238,7 +238,18 @@ public class MenuActivity extends Activity implements LocationListener{
                 restaurant.number = row.getString("number");
                 restaurant.photoloc = row.getString("photo_loc");
                 restaurant.cuisine = row.getString("cuisine");
-                restaurant.price = row.getInt("price");
+                restaurant.price = row.getString("price");
+                restaurant.comments = new Vector<Comment>();
+                JSONArray comments = row.getJSONArray("comments");
+                for (int j = 0; j < comments.length(); j++) {
+                    JSONObject jsonComment = comments.getJSONObject(j);
+                    Comment comment = new Comment();
+                    comment.restaurant_id = jsonComment.getInt("restaurant_id");
+                    comment.comment = jsonComment.getString("comment");
+                    comment.name = jsonComment.getString("name");
+                    comment.rating = jsonComment.getInt("rating");
+                    restaurant.comments.add(comment);
+                }
                 for (int j = 0; j < days.length; j++) {
                     Day day = new Day();
                     JSONObject dayObj = hours.getJSONObject(days[j]);
