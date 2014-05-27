@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:flatui="http://schemas.android.com/apk/res-auto"
     android:background="@color/lightgreytan">
 
 
@@ -19,7 +20,7 @@
         android:layout_gravity="center_horizontal" />
     <it.gmariotti.cardslib.library.view.CardView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="420dp"
         android:id="@+id/card_single"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -27,12 +28,60 @@
         >
 
     </it.gmariotti.cardslib.library.view.CardView>
-    <it.gmariotti.cardslib.library.view.CardListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/myList_single"
-        android:divider="@android:color/transparent"/>
-
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <com.cengalabs.flatui.views.FlatEditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:id="@+id/card_single_name"
+            flatui:theme="@array/custom_theme"
+            flatui:cornerRadius="0dp"
+            android:singleLine="true"
+            android:layout_marginLeft="2dp"
+            flatui:fieldStyle="box"/>
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_alignParentTop="true"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:id="@+id/card_single_stars"
+            android:isIndicator="false"
+            android:rating="2"
+            android:numStars="5"
+            />
+    </LinearLayout>
+    <com.cengalabs.flatui.views.FlatEditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Your review"
+        android:minLines="2"
+        android:maxLines="4"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:id="@+id/card_single_comment"
+        android:layout_below="@id/card_single_name"
+        flatui:fieldStyle="box"
+        flatui:cornerRadius="0dp"
+        flatui:theme="@array/custom_theme"/>
+    <com.cengalabs.flatui.views.FlatButton
+        android:id="@+id/card_single_submit"
+        android:layout_below="@id/card_single_comment"
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:text="Submit your comment"
+        android:textColor="@color/wayne_yellow"
+        android:textSize="12dp"
+        flatui:theme="@array/custom_theme"
+        flatui:borderWidth="0dp"
+        flatui:cornerRadius="0dp"
+        flatui:size="20dp"/>
 </LinearLayout>
 

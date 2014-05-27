@@ -103,7 +103,7 @@ public class CustomCardExtended extends CustomCard {
         }
 
         if(resImage != null) {
-            resImage.setImageResource(info.id);
+            resImage.setImageResource(info.idPicture);
         }
 
         if(resAddress != null){
@@ -146,7 +146,7 @@ public class CustomCardExtended extends CustomCard {
 
         if(resHours != null){
             String hours = new String();
-            hours += "Hours: \n";
+            hours += "Hours: ";
             /*
             if(dayHours.isClosed()) {
                 hours = "Closed Today.";
@@ -159,13 +159,13 @@ public class CustomCardExtended extends CustomCard {
             for(int i = 0; i < 7; i++){
                 Day hour = info.days.get(days[i].toLowerCase());
 
-                hours = hours + days[i] + ": ";
+                hours = hours +"\n"+ days[i] + ": ";
                 if(hour.isClosed()) {
-                    hours += "Closed\n";
+                    hours += "Closed";
                 } else if(dayHours.is24Hour()) {
-                    hours += "Open 24 hours.\n";
+                    hours += "Open 24 hours.";
                 } else {
-                    hours = hours + hour.openTimeString() + " - " + hour.closeTimeString() + "\n";
+                    hours = hours + hour.openTimeString() + " - " + hour.closeTimeString();
                 }
             }
 

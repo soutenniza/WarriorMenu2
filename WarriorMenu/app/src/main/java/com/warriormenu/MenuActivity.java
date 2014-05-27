@@ -75,8 +75,9 @@ public class MenuActivity extends Activity implements LocationListener{
         StrictMode.ThreadPolicy policy =
                 new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
+        GlobalApp globalApp = (GlobalApp) getApplicationContext();
         restaurants = intRests();
+        globalApp.setRestaurants(restaurants);
         cards = new ArrayList<Card>();
         typeface = Typeface.createFromAsset(getAssets(), "Roboto-LightItalic.ttf");
         typeface2 = Typeface.createFromAsset(getAssets(), "Roboto-BoldCondensedItalic.ttf");
@@ -101,15 +102,14 @@ public class MenuActivity extends Activity implements LocationListener{
             Log.d("waitcatch", "yes");
         }
 
-        for(int i = 0; i < restaurants.size();i++){
+        for(int i = 0; i < globalApp.getRestaurants().size();i++){
            try {
-               restaurants.get(i).id = getResources().getIdentifier(restaurants.get(i).photoloc, "drawable", getPackageName());
+               globalApp.getRestaurants().get(i).idPicture = getResources().getIdentifier(globalApp.getRestaurants().get(i).photoloc, "drawable", getPackageName());
            }catch(Exception e){
                Log.d("Exception", "e");
            }
 
-           CustomCard card = new CustomCard(this, restaurants.get(i), typeface, typeface2, myLocation);
-           card.setId(card.info.address);
+           CustomCard card = new CustomCard(this, globalApp.getRestaurants().get(i), typeface, typeface2, myLocation);
            card.setShadow(true);
            card.setSwipeable(true);
 
@@ -117,7 +117,7 @@ public class MenuActivity extends Activity implements LocationListener{
                 @Override
                 public void onClick(Card card, View view) {
                     Intent intent = new Intent(MenuActivity.this, SingleActivity.class);
-                    intent.putExtras(bundling(((CustomCard) card).info));
+                    intent.putExtras(bundling(((CustomCard)card).info.restID));
                     startActivity(intent);
                 }
             });
@@ -130,7 +130,6 @@ public class MenuActivity extends Activity implements LocationListener{
         myAdapter = new CardArrayAdapter(getApplicationContext(),cards);
         listView = (CardListView) findViewById(R.id.myList);
         listView.setDividerHeight(10);
-
 
         if (listView!=null){
             listView.setAdapter(myAdapter);
@@ -369,13 +368,9 @@ public class MenuActivity extends Activity implements LocationListener{
 
     }
 
-    public Bundle bundling(RInfo rInfo){
+    public Bundle bundling(int id){
         Bundle b = new Bundle();
-        Gson gson = new Gson();
-        ArrayList<RInfo> arrayList = new ArrayList<RInfo>();
-        arrayList.add(rInfo);
-        String json = gson.toJson(arrayList);
-        b.putString("info", json);
+        b.putInt("info", id);
         b.putDouble("lat", myLocation.getLatitude());
         b.putDouble("long", myLocation.getLongitude());
         return b;

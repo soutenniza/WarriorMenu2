@@ -20,7 +20,8 @@ public class RInfo {
     public float distance;
     public String url;
     public String photoloc;
-    public int id;
+    public int idPicture;
+    public int restID;
     public boolean open;
     public String cuisine;
     public String price;

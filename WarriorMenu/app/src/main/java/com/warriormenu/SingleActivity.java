@@ -2,7 +2,10 @@ package com.warriormenu;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -12,7 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.cengalabs.flatui.views.FlatButton;
@@ -31,9 +36,8 @@ import it.gmariotti.cardslib.library.view.CardView;
 public class SingleActivity extends Activity{
 
     private Location myLocation;
-    private CustomCardExtended customCardExtended;
     private TextView mainTitle;
-    public RInfo r;
+    public int r;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,25 +50,40 @@ public class SingleActivity extends Activity{
         Typeface typeface2 = Typeface.createFromAsset(getAssets(), "Roboto-BoldCondensedItalic.ttf");
         mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(typeface);
+        final GlobalApp globalApp = (GlobalApp) getApplicationContext();
+        final EditText editName = (EditText) findViewById(R.id.card_single_name);
+        final EditText editComment = (EditText) findViewById(R.id.card_single_comment);
+        final RatingBar ratingBar = (RatingBar) findViewById(R.id.card_single_stars);
+        final Button button = (Button) findViewById(R.id.card_single_submit);
+        LayerDrawable layer = (LayerDrawable) ratingBar.getProgressDrawable();
+        layer.getDrawable(2).setColorFilter(Color.parseColor("#ffcc33"), PorterDuff.Mode.SRC_ATOP);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         ArrayList<Card> cards = new ArrayList<Card>();
-        customCardExtended = new CustomCardExtended(getApplicationContext(), r, typeface, typeface2, myLocation);
+        final CustomCardExtended customCardExtended = new CustomCardExtended(getApplicationContext(), globalApp.getRestaurants().get(r), typeface, typeface2, myLocation);
         CardView cardView = (CardView) findViewById(R.id.card_single);
         cardView.setCard(customCardExtended);
 
-        CommentNewCard commentNewCard = new CommentNewCard(getApplicationContext(), r);
-        commentNewCard.setBackgroundResourceId(R.color.lightgreytan);
-        customCardExtended.addNewComment(commentNewCard);
-    }
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Comment comment = new Comment();
+                comment.name = editName.getText().toString();
+                comment.rating = ratingBar.getRating();
+                comment.comment = editComment.getText().toString();
+                globalApp.getRestaurants().get(r).comments.add(comment);
 
-    @Override
-    public void onBackPressed(){
-        Intent intent = new Intent(SingleActivity.this, MenuActivity.class);
-        intent.putExtras(bundling(r));
-        startActivity(intent);
-    }
+                CommentCard card = new CommentCard(getApplicationContext(), comment.name, comment.comment, comment.rating);
+                customCardExtended.addNewComment(card);
 
+                editName.setHint("Name");
+                editComment.setHint("Your Review");
+                button.setText("Submitted");
+                button.setClickable(false);
+            }
+        });
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -85,15 +104,12 @@ public class SingleActivity extends Activity{
         return super.onOptionsItemSelected(item);
     }
 
-    public RInfo unBundling(Bundle b){
-        String json = b.getString("info");
-        Type type = new TypeToken<ArrayList<RInfo>>(){}.getType();
-        ArrayList<RInfo> arrayList = new Gson().fromJson(json, type);
+    public int unBundling(Bundle b){
         Double latitude = b.getDouble("lat");
         Double longitude = b.getDouble("long");
         myLocation.setLatitude(latitude);
         myLocation.setLongitude(longitude);
-        return arrayList.get(0);
+        return b.getInt("info");
     }
 
     public Bundle bundling(RInfo rInfo){

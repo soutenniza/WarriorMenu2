@@ -23,7 +23,7 @@ import it.gmariotti.cardslib.library.internal.Card;
  */
 public class CommentNewCard extends Card{
     public EditText nameInput;
-    public EditText reviewInput;
+    public FlatEditText reviewInput;
     public RatingBar ratingBar;
     public Button submitButton;
     protected Typeface typeface;
@@ -47,7 +47,7 @@ public class CommentNewCard extends Card{
     @Override
     public void setupInnerViewElements(ViewGroup parent, View view){
         nameInput = (EditText) parent.findViewById(R.id.card_comment_name_new);
-        reviewInput = (EditText) parent.findViewById(R.id.card_comment_comment_new);
+        reviewInput = (FlatEditText) parent.findViewById(R.id.card_comment_comment_new);
         ratingBar = (RatingBar) parent.findViewById(R.id.card_comment_stars_new);
         submitButton = (FlatButton) parent.findViewById(R.id.card_comment_submit);
 

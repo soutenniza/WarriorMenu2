@@ -94,7 +94,7 @@ public class CustomCard extends Card {
         }
 
         if(resImage != null) {
-            resImage.setImageResource(info.id);
+            resImage.setImageResource(info.idPicture);
         }
 
         /*if(resAddress != null){
