@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.cengalabs.flatui.views.FlatButton;
 import com.cengalabs.flatui.views.FlatEditText;
+import com.google.gson.Gson;
 
 import it.gmariotti.cardslib.library.internal.Card;
 
@@ -54,6 +55,11 @@ public class CommentNewCard extends Card{
             submitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Comment comment = new Comment();
+                    comment.name = nameInput.getText().toString();
+                    comment.rating = ratingBar.getRating();
+                    comment.comment = reviewInput.getText().toString();
+                    info.comments.add(comment);
                     //info.names.add(nameInput.getText().toString());
                     //info.reviews.add(reviewInput.getText().toString());
                     //info.ratings.add(ratingBar.getRating());

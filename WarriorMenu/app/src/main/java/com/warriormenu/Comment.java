@@ -6,6 +6,6 @@ package com.warriormenu;
 public class Comment {
     public String name;
     public String comment;
-    public int rating;
+    public double rating;
     public int restaurant_id;
 }
