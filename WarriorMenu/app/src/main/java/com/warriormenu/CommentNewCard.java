@@ -54,9 +54,9 @@ public class CommentNewCard extends Card{
             submitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    info.names.add(nameInput.getText().toString());
-                    info.reviews.add(reviewInput.getText().toString());
-                    info.ratings.add(ratingBar.getRating());
+                    //info.names.add(nameInput.getText().toString());
+                    //info.reviews.add(reviewInput.getText().toString());
+                    //info.ratings.add(ratingBar.getRating());
                 }
             });
         }

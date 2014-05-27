@@ -47,9 +47,9 @@ public class SingleActivity extends Activity{
         mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(typeface);
 
-        r.names.add("Van");
-        r.reviews.add("I love to eat pies all day even though I cant move any part of of my body. How did I type this?");
-        r.ratings.add(1.f);
+        //r.names.add("Van");
+        //r.reviews.add("I love to eat pies all day even though I cant move any part of of my body. How did I type this?");
+        //r.ratings.add(1.f);
 
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);

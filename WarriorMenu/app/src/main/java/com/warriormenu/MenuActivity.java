@@ -214,7 +214,7 @@ public class MenuActivity extends Activity implements LocationListener{
         String strFile = null;
         InputStream inFile = getResources().openRawResource(R.raw.restaurants);
         try{
-            URL url = new URL("http://warrior-prod.cfapps.io/restaurants");
+            URL url = new URL("http://warrior-dev.cfapps.io/restaurants");
             HttpURLConnection con = (HttpURLConnection) url
                     .openConnection();
             con.connect();
@@ -258,9 +258,6 @@ public class MenuActivity extends Activity implements LocationListener{
 
                     restaurant.days.put(days[j],day);
                 }
-                restaurant.names = new Vector<String>();
-                restaurant.reviews = new Vector<String>();
-                restaurant.ratings = new Vector<Float>();
                 restaurantArray.add(restaurant);
 
             }
