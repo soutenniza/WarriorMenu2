@@ -69,7 +69,7 @@ public class SingleActivity extends Activity{
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         ArrayList<Card> cards = new ArrayList<Card>();
-        final CustomCardExtended customCardExtended = new CustomCardExtended(getApplicationContext(), globalApp.getRestaurants().get(r), globalApp.getTypeface(), globalApp.getTypeface2(), myLocation);
+        final CustomCardExtended customCardExtended = new CustomCardExtended(getApplicationContext(), globalApp.getRestaurants().get(r), globalApp.getTypeface(), globalApp.getTypeface2(), globalApp.getLocation());
         CardView cardView = (CardView) findViewById(R.id.card_single);
         cardView.setCard(customCardExtended);
 

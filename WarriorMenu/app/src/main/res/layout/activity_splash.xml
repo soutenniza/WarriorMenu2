@@ -5,7 +5,7 @@
     android:background="@color/wayne_green">
 
     <TextView
-        android:text="Welcome!\nLoading Data"
+        android:text="Welcome!\nLoading Restaurant Data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/wayne_yellow"

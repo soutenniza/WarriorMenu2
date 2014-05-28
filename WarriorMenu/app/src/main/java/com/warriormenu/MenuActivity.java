@@ -52,7 +52,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MenuActivity extends Activity implements LocationListener{
+public class MenuActivity extends Activity{
     protected Location myLocation = new Location("current");
     private PullToRefreshLayout myPulltoRefresh;
     private ArrayList<Card> cards;
@@ -64,73 +64,30 @@ public class MenuActivity extends Activity implements LocationListener{
     private ListView drawerList;
     private CardArrayAdapter myAdapter;
     private CardListView listView;
+    private GlobalApp globalApp;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        StrictMode.ThreadPolicy policy =
-                new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        GlobalApp globalApp = (GlobalApp) getApplicationContext();
-        globalApp.setRestaurants(intRests());
-        cardsOriginal = new ArrayList<Card>();
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,0,this);
+        globalApp = (GlobalApp) getApplicationContext();
         final TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(globalApp.getTypeface());
-        FlatUI.initDefaultValues(this);
-        FlatUI.setDefaultTheme(FlatUI.GRASS);
         sortOptions = getResources().getStringArray(R.array.sorts);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.drawer_left);
 
         drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_item, sortOptions));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-
-        try{
-            Thread.sleep(5000);
-        }catch(Exception ex) {
-            Log.d("waitcatch", "yes");
-        }
-
-        for(int i = 0; i < globalApp.getRestaurants().size();i++){
-           try {
-               globalApp.getRestaurants().get(i).idPicture = getResources().getIdentifier(globalApp.getRestaurants().get(i).photoloc, "drawable", getPackageName());
-           }catch(Exception e){
-               Log.d("Exception", "e");
-           }
-
-           CustomCard card = new CustomCard(this, globalApp.getRestaurants().get(i), globalApp.getTypeface(), globalApp.getTypeface2(), myLocation);
-           card.info.restID = i;
-           card.setShadow(true);
-           card.setSwipeable(true);
-           card.setOpenClose();
-           card.setOnClickListener(new Card.OnCardClickListener() {
-                @Override
-                public void onClick(Card card, View view) {
-                    Intent intent = new Intent(MenuActivity.this, SingleActivity.class);
-                    intent.putExtras(bundling(((CustomCard)card).info.restID));
-                    startActivity(intent);
-                }
-            });
-           //card.resImage.setImageResource(imageID(this, url));
-           //card.setSwipeable(true);
-           cardsOriginal.add(card);
-        }
-
+        cardsOriginal = new ArrayList<Card>();
+        intializeCards();
         cards = new ArrayList<Card>(cardsOriginal);
+        globalApp.setOriginalCards(cardsOriginal);
         int category = unBundling(this.getIntent().getExtras());
         listView = (CardListView) findViewById(R.id.myList);
         listView.setDividerHeight(10);
         categoryCards(category);
-
-        //myPulltoRefresh = (PullToRefreshLayout) findViewById(R.id.refresh_layout);
-
-        //ActionBarPullToRefresh.from(this).allChildrenArePullable().listener(this).setup(myPulltoRefresh);
 
     }
 
@@ -143,125 +100,6 @@ public class MenuActivity extends Activity implements LocationListener{
         }
         return super.onKeyDown(keyCode, e);
     }
-
-
-    private String readStream(InputStream in) {
-        BufferedReader reader = null;
-        StringBuffer sBuffer = new StringBuffer();
-        String strLine = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(in));
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                sBuffer.append(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return sBuffer.toString();
-    }
-
-    private Vector<RInfo> intRests(){
-        final GlobalApp globalApp = (GlobalApp) getApplicationContext();
-        Vector<RInfo> restaurantArray = new Vector<RInfo>();
-        String array;
-        String[] infoArray;
-        String strFile = null;
-        InputStream inFile = getResources().openRawResource(R.raw.restaurants);
-        try{
-            URL url = new URL(globalApp.getURL() + "/restaurants");
-            HttpURLConnection con = (HttpURLConnection) url
-                    .openConnection();
-            con.connect();
-            strFile = readStream(con.getInputStream());
-
-            JSONArray restaurants = new JSONArray(strFile);
-            for (int i = 0; i < restaurants.length(); i++) {
-                JSONObject row = restaurants.getJSONObject(i);
-                RInfo restaurant = new RInfo();
-                restaurant.days = new HashMap<String, Day>();
-                JSONObject hours = row.getJSONObject("hours");
-                String[] days = {"sunday", "monday","tuesday",
-                        "wednesday", "thursday", "friday", "saturday"};
-                restaurant.restID = row.getInt("id");
-                restaurant.name = row.getString("name");
-                restaurant.address = row.getString("address");
-                restaurant.latitude = row.getDouble("latitude");
-                restaurant.longitude = row.getDouble("longitude");
-                restaurant.warriorD = row.getBoolean("warrior_bucks");
-                restaurant.rating = row.getDouble("rating");
-                restaurant.number = row.getString("number");
-                restaurant.photoloc = row.getString("photo_loc");
-                restaurant.cuisine = row.getString("cuisine");
-                restaurant.price = row.getString("price");
-                restaurant.comments = new Vector<Comment>();
-                JSONArray comments = row.getJSONArray("comments");
-                for (int j = 0; j < comments.length(); j++) {
-                    JSONObject jsonComment = comments.getJSONObject(j);
-                    Comment comment = new Comment();
-                    comment.restaurant_id = jsonComment.getInt("restaurant_id");
-                    comment.comment = jsonComment.getString("comment");
-                    comment.name = jsonComment.getString("name");
-                    comment.rating = jsonComment.getDouble("rating");
-                    restaurant.comments.add(comment);
-                }
-                for (int j = 0; j < days.length; j++) {
-                    Day day = new Day();
-                    JSONObject dayObj = hours.getJSONObject(days[j]);
-                    day.open = dayObj.getInt("open");
-                    day.close = dayObj.getInt("close");
-
-                    restaurant.days.put(days[j],day);
-                }
-                restaurantArray.add(restaurant);
-
-            }
-        } catch (IOException e){
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return restaurantArray;
-    }
-
-    @Override
-    public void onProviderEnabled(String provider){
-        Log.d("provider:", "enabled");
-    }
-
-    @Override
-    public void onProviderDisabled(String provider){
-        Log.d("provider:", "disabled");
-    }
-
-    @Override
-    public void onLocationChanged(Location location){
-        myLocation.setLatitude(location.getLatitude());
-        myLocation.setLongitude(location.getLongitude());
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extra){
-        Log.d("Lat", "Status");
-    }
-
-    /*@Override Placeholder for refresh
-    public void onRefreshStarted(View v){
-        for(int i = 0; i < restaurants.size();i++){
-            CustomCard card = new CustomCard(getBaseContext(), restaurants.get(i), typeface, typeface2, myLocation);
-            card.setShadow(true);
-            card.setSwipeable(true);
-            cards.add(card);
-        }
-    }*/
 
     public class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -395,10 +233,10 @@ public class MenuActivity extends Activity implements LocationListener{
 
     private void sortOpened(){
         ArrayList<Card> temp = new ArrayList<Card>();
-        for(int i =0; i<cards.size();i++){
-            CustomCard cc = (CustomCard) cards.get(i);
+        for(int i =0; i<cardsOriginal.size();i++){
+            CustomCard cc = (CustomCard) cardsOriginal.get(i);
             if(cc.info.open)
-                temp.add(cards.get(i));
+                temp.add(cardsOriginal.get(i));
         }
 
         cards.clear();
@@ -430,6 +268,32 @@ public class MenuActivity extends Activity implements LocationListener{
         return b.getInt("c");
     }
 
+    public void intializeCards(){
+            for(int i = 0; i < globalApp.getRestaurants().size();i++){
+                try {
+                    globalApp.getRestaurants().get(i).idPicture = getResources().getIdentifier(globalApp.getRestaurants().get(i).photoloc, "drawable", getPackageName());
+                }catch(Exception e){
+                    Log.d("Exception", "e");
+                }
+
+                CustomCard card = new CustomCard(this, globalApp.getRestaurants().get(i), globalApp.getTypeface(), globalApp.getTypeface2(), globalApp.getLocation());
+                card.info.restID = i;
+                card.setShadow(true);
+                card.setSwipeable(true);
+                card.setOpenClose();
+                card.setOnClickListener(new Card.OnCardClickListener() {
+                    @Override
+                    public void onClick(Card card, View view) {
+                        Intent intent = new Intent(MenuActivity.this, SingleActivity.class);
+                        intent.putExtras(bundling(((CustomCard)card).info.restID));
+                        startActivity(intent);
+                    }
+                });
+                //card.resImage.setImageResource(imageID(this, url));
+                //card.setSwipeable(true);
+                cardsOriginal.add(card);
+            }
+    }
 }
 
 
