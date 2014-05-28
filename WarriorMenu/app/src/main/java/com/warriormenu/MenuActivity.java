@@ -202,7 +202,7 @@ public class MenuActivity extends Activity implements LocationListener{
         String strFile = null;
         InputStream inFile = getResources().openRawResource(R.raw.restaurants);
         try{
-            URL url = new URL(globalApp.getURL() + "/restaurants");
+            URL url = new URL("http://warrior-dev.cfapps.io/" + "/restaurants");
             HttpURLConnection con = (HttpURLConnection) url
                     .openConnection();
             con.connect();

@@ -7,10 +7,10 @@
 <color name="lightgreytan">#CCCCBC</color>
 <color name="open_green">#00FF00</color>
 <color name="close_red">#D11919</color>
-<color name="custom_theme_darker">#0b4f45</color>
-<color name="custom_theme_dark">#0b4f45</color>
+<color name="custom_theme_darker">#3C726A</color>
+<color name="custom_theme_dark">#3C726A</color>
 <color name="custom_theme_primary">#0b4f45</color>
-<color name="custom_theme_light">#0b4f45</color>
+<color name="custom_theme_light">#3C726A</color>
     <integer-array name="custom_theme">
         <item>@color/custom_theme_dark</item>
         <item>@color/custom_theme_darker</item>

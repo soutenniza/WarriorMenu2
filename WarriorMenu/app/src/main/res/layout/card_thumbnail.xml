@@ -65,8 +65,9 @@
         android:paddingLeft="0dp"
         android:textSize="12dp"
         flatui:theme="@array/custom_theme"
+        flatui:blockButtonEffectHeight="5dp"
         flatui:borderWidth="0dp"
-        flatui:cornerRadius="0dp"
+        flatui:cornerRadius="2dp"
         flatui:size="20dp"/>
 
 

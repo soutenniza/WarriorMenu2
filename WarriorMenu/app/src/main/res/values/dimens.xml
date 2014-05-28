@@ -6,5 +6,6 @@
     <dimen name="rest_title">25dp</dimen>
     <dimen name="address_size">15dp</dimen>
     <dimen name="distance">15dp</dimen>
+    <dimen name="card_base_empty_height">70dp</dimen>
 
     </resources>

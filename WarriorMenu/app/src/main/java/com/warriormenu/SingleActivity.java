@@ -117,6 +117,7 @@ public class SingleActivity extends Activity{
                 }
 
                 CommentCard card = new CommentCard(getApplicationContext(), comment.name, comment.comment, comment.rating);
+                card.setBackgroundResourceId(R.color.lightgreytan);
                 customCardExtended.addNewComment(card);
 
                 editName.setHint("Name");

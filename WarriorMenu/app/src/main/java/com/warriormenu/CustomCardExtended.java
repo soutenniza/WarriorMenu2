@@ -147,20 +147,12 @@ public class CustomCardExtended extends CustomCard {
 
         if(resHours != null){
             String hours = new String();
-            hours += "Hours: ";
-            /*
-            if(dayHours.isClosed()) {
-                hours = "Closed Today.";
-            } else if(dayHours.is24Hour()) {
-                hours = "Open 24 hours.";
-            } else {
-                hours = "Hours: " + dayHours.openTimeString() + " - " + dayHours.closeTimeString();
-            }*/
 
             for(int i = 0; i < 7; i++){
                 Day hour = info.days.get(days[i].toLowerCase());
-
-                hours = hours +"\n"+ days[i] + ": ";
+                if(i > 0)
+                    hours += "\n";
+                hours = hours + days[i] + ": ";
                 if(hour.isClosed()) {
                     hours += "Closed";
                 } else if(dayHours.is24Hour()) {
