@@ -9,6 +9,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.provider.UserDictionary;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -209,6 +210,7 @@ public class CustomCardExtended extends CustomCard {
                 CommentCard card = new CommentCard(mContext, comment.name, comment.comment, comment.rating);
                 card.setBackgroundResourceId(R.color.lightgreytan);
                 cards.add(card);
+                Log.i("warrior", comment.name);
             }
             info.avgRating = temp/(10.0+info.comments.size());
             CardArrayAdapter adapter = new CardArrayAdapter(mContext, cards);
