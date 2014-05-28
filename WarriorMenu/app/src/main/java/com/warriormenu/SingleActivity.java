@@ -9,6 +9,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +25,17 @@ import com.cengalabs.flatui.views.FlatButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +83,38 @@ public class SingleActivity extends Activity{
                 comment.rating = ratingBar.getRating();
                 comment.comment = editComment.getText().toString();
                 globalApp.getRestaurants().get(r).comments.add(comment);
+                URL url;
+                URLConnection urlConn;
+                try {
+
+                    url = new URL(globalApp.getURL() + "/restaurants/" + Integer.toString(globalApp.getRestaurants().get(r).restID+1) + "/comments");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setDoInput(true);
+                    connection.setDoOutput(true);
+                    connection.setUseCaches(false);
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    connection.connect();
+                    JSONObject jsonParam = new JSONObject();
+                    jsonParam.put("name", comment.name);
+                    jsonParam.put("rating", comment.rating);
+                    jsonParam.put("comment", comment.comment);
+                    DataOutputStream wr = new DataOutputStream(connection.getOutputStream ());
+                    wr.writeBytes(jsonParam.toString());
+                    wr.flush();
+                    wr.close();
+                    connection.disconnect();
+                    String line;
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+                    while ((line = reader.readLine()) != null) {
+                    }
+                    reader.close();
+                } catch (IOException e){
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 CommentCard card = new CommentCard(getApplicationContext(), comment.name, comment.comment, comment.rating);
                 customCardExtended.addNewComment(card);

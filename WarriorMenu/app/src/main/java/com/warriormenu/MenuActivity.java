@@ -195,13 +195,14 @@ public class MenuActivity extends Activity implements LocationListener{
     }
 
     private Vector<RInfo> intRests(){
+        final GlobalApp globalApp = (GlobalApp) getApplicationContext();
         Vector<RInfo> restaurantArray = new Vector<RInfo>();
         String array;
         String[] infoArray;
         String strFile = null;
         InputStream inFile = getResources().openRawResource(R.raw.restaurants);
         try{
-            URL url = new URL("http://warrior-dev.cfapps.io/restaurants");
+            URL url = new URL(globalApp.getURL() + "/restaurants");
             HttpURLConnection con = (HttpURLConnection) url
                     .openConnection();
             con.connect();
@@ -215,7 +216,7 @@ public class MenuActivity extends Activity implements LocationListener{
                 JSONObject hours = row.getJSONObject("hours");
                 String[] days = {"sunday", "monday","tuesday",
                         "wednesday", "thursday", "friday", "saturday"};
-
+                restaurant.restID = row.getInt("id");
                 restaurant.name = row.getString("name");
                 restaurant.address = row.getString("address");
                 restaurant.latitude = row.getDouble("latitude");

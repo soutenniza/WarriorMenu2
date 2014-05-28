@@ -22,4 +22,8 @@ public class GlobalApp extends Application {
     public void setRestaurants(Vector<RInfo> r){
         restaurants.addAll(r);
     }
+
+    public String getURL() {
+        return "http://192.168.1.215:3000";
+    }
 }

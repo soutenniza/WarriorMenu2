@@ -16,6 +16,16 @@ import com.cengalabs.flatui.views.FlatButton;
 import com.cengalabs.flatui.views.FlatEditText;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+
 import it.gmariotti.cardslib.library.internal.Card;
 
 /**
@@ -60,6 +70,7 @@ public class CommentNewCard extends Card{
                     comment.rating = ratingBar.getRating();
                     comment.comment = reviewInput.getText().toString();
                     info.comments.add(comment);
+
                     //info.names.add(nameInput.getText().toString());
                     //info.reviews.add(reviewInput.getText().toString());
                     //info.ratings.add(ratingBar.getRating());
