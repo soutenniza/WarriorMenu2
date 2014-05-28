@@ -174,7 +174,7 @@ public class CustomCardExtended extends CustomCard {
         }
 
         if(ratingBar != null){
-            ratingBar.setRating((float)info.rating);
+            ratingBar.setRating((float)info.avgRating);
             LayerDrawable layer = (LayerDrawable) ratingBar.getProgressDrawable();
             layer.getDrawable(2).setColorFilter(Color.parseColor("#ffcc33"), PorterDuff.Mode.SRC_ATOP);
         }
@@ -202,12 +202,15 @@ public class CustomCardExtended extends CustomCard {
 
         if(cardList != null){
             cards = new ArrayList<Card>();
+            double temp = info.rating*10;
             for(int i = 0; i < info.comments.size(); i++){
                 Comment comment = info.comments.get(i);
+                temp += info.comments.get(i).rating;
                 CommentCard card = new CommentCard(mContext, comment.name, comment.comment, comment.rating);
                 card.setBackgroundResourceId(R.color.lightgreytan);
                 cards.add(card);
             }
+            info.avgRating = temp/(10.0+info.comments.size());
             CardArrayAdapter adapter = new CardArrayAdapter(mContext, cards);
             cardList.setAdapter(adapter);
         }

@@ -110,9 +110,9 @@ public class MenuActivity extends Activity implements LocationListener{
            }
 
            CustomCard card = new CustomCard(this, globalApp.getRestaurants().get(i), typeface, typeface2, myLocation);
+           card.info.restID = i;
            card.setShadow(true);
            card.setSwipeable(true);
-
             card.setOnClickListener(new Card.OnCardClickListener() {
                 @Override
                 public void onClick(Card card, View view) {

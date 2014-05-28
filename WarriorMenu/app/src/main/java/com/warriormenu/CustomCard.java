@@ -150,8 +150,13 @@ public class CustomCard extends Card {
         }*/
 
         if(ratingBar != null){
+            double temp = info.rating*10;
+            for(int i = 0; i < info.comments.size(); i++){
+                temp += info.comments.get(i).rating;
+            }
+            info.avgRating = temp/(10.0+info.comments.size());
             ratingBar.setNumStars(5);
-            ratingBar.setRating((float)info.rating);
+            ratingBar.setRating((float)info.avgRating);
             LayerDrawable layer = (LayerDrawable) ratingBar.getProgressDrawable();
             layer.getDrawable(2).setColorFilter(Color.parseColor("#ffcc33"), PorterDuff.Mode.SRC_ATOP);
         }

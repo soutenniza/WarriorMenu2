@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:layout_width="fill_parent" android:layout_height="50dp"
     >
         <!-- Use same ID to use built-in features -->
         <TextView
@@ -9,7 +9,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/card_comment_username"
             android:text="Van Nguyen"
-            android:textSize="24dp"
+            android:textSize="20dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:textColor="@color/wayne_green"
@@ -21,7 +21,7 @@
             android:layout_below="@+id/card_comment_username"
             android:text="Very delicious pies"
             android:layout_marginTop="2dp"
-            android:textSize="14dp"
+            android:textSize="15dp"
             android:textColor="@color/black"
             android:layout_marginLeft="10dp"/>
         <RatingBar

@@ -14,6 +14,7 @@ public class RInfo {
     public String number;
     public boolean warriorD;
     public double rating;
+    public double avgRating;
     public double latitude;
     public double longitude;
     Map<String, Day> days;
