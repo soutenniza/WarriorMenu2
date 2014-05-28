@@ -1,14 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:flatui="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="@color/lightgreytan"
-    tools:context="com.warriormenu.MainActivity">
+    android:background="@color/lightgreytan">
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,10 +14,132 @@
         android:text="@string/app_name"
         android:textSize="@dimen/main_title"
         android:textColor="@color/wayne_green"
-        android:id="@+id/main_textView1"
+        android:id="@+id/title_main"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/categories_title"
+        android:text="What sounds good right now?"
+        android:layout_gravity="center_horizontal"
+        android:textSize="15dp"
+        android:textColor="@color/wayne_green"/>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <TextView
+            android:layout_width="@dimen/button_space_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/centerone"
+            android:layout_centerHorizontal="true"/>
+        <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/american_button"
+            android:text="American"
+            android:layout_toLeftOf="@+id/centerone"
+            flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
+            flatui:cornerRadius="@dimen/button_cornerRadius"
+            flatui:theme="@array/custom_theme"/>
+        <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/coffee_button"
+            android:text="Coffee/Bakery"
+            android:layout_toRightOf="@id/centerone"
+            flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
+            flatui:cornerRadius="@dimen/button_cornerRadius"
+            flatui:theme="@array/custom_theme"/>
+        <TextView
+            android:layout_width="@dimen/button_space_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/centertwo"
+            android:layout_below="@id/centerone"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/button_margin"/>
+        <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/italian_button"
+            android:layout_below="@id/american_button"
+            android:text="Italian"
+            android:layout_toLeftOf="@+id/centertwo"
+            android:layout_marginTop="@dimen/button_margin"
+            flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
+            flatui:cornerRadius="@dimen/button_cornerRadius"
+            flatui:theme="@array/custom_theme"/>
+        <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/affordable_button"
+            android:layout_below="@id/coffee_button"
+            android:text="Affordable"
+            android:layout_toRightOf="@id/centertwo"
+            android:layout_marginTop="@dimen/button_margin"
+            flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
+            flatui:cornerRadius="@dimen/button_cornerRadius"
+            flatui:theme="@array/custom_theme"/>
+        <TextView
+            android:layout_width="@dimen/button_space_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/centerthree"
+            android:layout_below="@id/centertwo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/button_margin"/>
+        <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/asian_button"
+            android:layout_below="@id/italian_button"
+            android:text="Asian"
+            android:layout_toLeftOf="@+id/centerthree"
+            android:layout_marginTop="@dimen/button_margin"
+            flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
+            flatui:cornerRadius="@dimen/button_cornerRadius"
+            flatui:theme="@array/custom_theme"/>
+        <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/warriorDollar_button"
+            android:layout_below="@id/affordable_button"
+            android:text="Warrior Dollar"
+            android:layout_toRightOf="@id/centerthree"
+            android:layout_marginTop="@dimen/button_margin"
+            flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
+            flatui:cornerRadius="@dimen/button_cornerRadius"
+            flatui:theme="@array/custom_theme"/>
+        <TextView
+            android:layout_width="@dimen/button_space_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/centerfour"
+            android:layout_below="@id/centerthree"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/button_margin"/>
+        <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/med_button"
+            android:layout_below="@id/asian_button"
+            android:text="Mediterranean"
+            android:layout_toLeftOf="@+id/centerfour"
+            android:layout_marginTop="@dimen/button_margin"
+            flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
+            flatui:cornerRadius="@dimen/button_cornerRadius"
+            flatui:theme="@array/custom_theme"/>
+        <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/open_button"
+            android:layout_below="@id/warriorDollar_button"
+            android:text="Open Now"
+            android:layout_toRightOf="@id/centerfour"
+            android:layout_marginTop="@dimen/button_margin"
+            flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
+            flatui:cornerRadius="@dimen/button_cornerRadius"
+            flatui:theme="@array/custom_theme"/>
 
+    </RelativeLayout>
 
-
-</RelativeLayout>
+</LinearLayout>

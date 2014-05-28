@@ -57,11 +57,9 @@ public class SingleActivity extends Activity{
 
         myLocation = new Location("temp");
         r = unBundling(this.getIntent().getExtras());
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "Roboto-LightItalic.ttf");
-        Typeface typeface2 = Typeface.createFromAsset(getAssets(), "Roboto-BoldCondensedItalic.ttf");
         mainTitle = (TextView) findViewById(R.id.main_textView1);
-        mainTitle.setTypeface(typeface);
         final GlobalApp globalApp = (GlobalApp) getApplicationContext();
+        mainTitle.setTypeface(globalApp.getTypeface());
         final EditText editName = (EditText) findViewById(R.id.card_single_name);
         final EditText editComment = (EditText) findViewById(R.id.card_single_comment);
         final RatingBar ratingBar = (RatingBar) findViewById(R.id.card_single_stars);
@@ -71,7 +69,7 @@ public class SingleActivity extends Activity{
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         ArrayList<Card> cards = new ArrayList<Card>();
-        final CustomCardExtended customCardExtended = new CustomCardExtended(getApplicationContext(), globalApp.getRestaurants().get(r), typeface, typeface2, myLocation);
+        final CustomCardExtended customCardExtended = new CustomCardExtended(getApplicationContext(), globalApp.getRestaurants().get(r), globalApp.getTypeface(), globalApp.getTypeface2(), myLocation);
         CardView cardView = (CardView) findViewById(R.id.card_single);
         cardView.setCard(customCardExtended);
 
@@ -129,24 +127,6 @@ public class SingleActivity extends Activity{
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        
-        return false;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     public int unBundling(Bundle b){
         Double latitude = b.getDouble("lat");

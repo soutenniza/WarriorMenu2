@@ -58,8 +58,6 @@ public class MenuActivity extends Activity implements LocationListener{
     private ArrayList<Card> cards;
     private ArrayList<Card> cardsOriginal;
     private Vector<RInfo> restaurants;
-    private Typeface typeface;
-    private Typeface typeface2;
     private LocationManager locationManager;
     private String[] sortOptions;
     private DrawerLayout drawerLayout;
@@ -76,16 +74,13 @@ public class MenuActivity extends Activity implements LocationListener{
                 new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         GlobalApp globalApp = (GlobalApp) getApplicationContext();
-        restaurants = intRests();
-        globalApp.setRestaurants(restaurants);
-        cards = new ArrayList<Card>();
-        typeface = Typeface.createFromAsset(getAssets(), "Roboto-LightItalic.ttf");
-        typeface2 = Typeface.createFromAsset(getAssets(), "Roboto-BoldCondensedItalic.ttf");
+        globalApp.setRestaurants(intRests());
+        cardsOriginal = new ArrayList<Card>();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,0,this);
         final TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
-        mainTitle.setTypeface(typeface);
+        mainTitle.setTypeface(globalApp.getTypeface());
         FlatUI.initDefaultValues(this);
         FlatUI.setDefaultTheme(FlatUI.GRASS);
         sortOptions = getResources().getStringArray(R.array.sorts);
@@ -109,11 +104,12 @@ public class MenuActivity extends Activity implements LocationListener{
                Log.d("Exception", "e");
            }
 
-           CustomCard card = new CustomCard(this, globalApp.getRestaurants().get(i), typeface, typeface2, myLocation);
+           CustomCard card = new CustomCard(this, globalApp.getRestaurants().get(i), globalApp.getTypeface(), globalApp.getTypeface2(), myLocation);
            card.info.restID = i;
            card.setShadow(true);
            card.setSwipeable(true);
-            card.setOnClickListener(new Card.OnCardClickListener() {
+           card.setOpenClose();
+           card.setOnClickListener(new Card.OnCardClickListener() {
                 @Override
                 public void onClick(Card card, View view) {
                     Intent intent = new Intent(MenuActivity.this, SingleActivity.class);
@@ -123,28 +119,19 @@ public class MenuActivity extends Activity implements LocationListener{
             });
            //card.resImage.setImageResource(imageID(this, url));
            //card.setSwipeable(true);
-           cards.add(card);
+           cardsOriginal.add(card);
         }
 
-        cardsOriginal = new ArrayList<Card>(cards);
-        myAdapter = new CardArrayAdapter(getApplicationContext(),cards);
+        cards = new ArrayList<Card>(cardsOriginal);
+        int category = unBundling(this.getIntent().getExtras());
         listView = (CardListView) findViewById(R.id.myList);
         listView.setDividerHeight(10);
-
-        if (listView!=null){
-            listView.setAdapter(myAdapter);
-        }
+        categoryCards(category);
 
         //myPulltoRefresh = (PullToRefreshLayout) findViewById(R.id.refresh_layout);
 
         //ActionBarPullToRefresh.from(this).allChildrenArePullable().listener(this).setup(myPulltoRefresh);
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        return false;
     }
 
     @Override
@@ -155,18 +142,6 @@ public class MenuActivity extends Activity implements LocationListener{
             return true;
         }
         return super.onKeyDown(keyCode, e);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 
@@ -202,7 +177,7 @@ public class MenuActivity extends Activity implements LocationListener{
         String strFile = null;
         InputStream inFile = getResources().openRawResource(R.raw.restaurants);
         try{
-            URL url = new URL("http://warrior-dev.cfapps.io/" + "/restaurants");
+            URL url = new URL(globalApp.getURL() + "/restaurants");
             HttpURLConnection con = (HttpURLConnection) url
                     .openConnection();
             con.connect();
@@ -291,10 +266,10 @@ public class MenuActivity extends Activity implements LocationListener{
     public class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View v, int p, long id){
-            sortCards(p);
+            sortDrawerCards(p);
         }
 
-        private void sortCards(int p){
+        private void sortDrawerCards(int p){
             drawerList.setItemChecked(p, true);
             if(p == 0)
                 sortAZNames();
@@ -311,6 +286,8 @@ public class MenuActivity extends Activity implements LocationListener{
             myAdapter.notifyDataSetChanged();
             drawerLayout.closeDrawer(drawerList);
         }
+
+
 
         private void sortAZNames(){
             Collections.sort(cards, new Comparator<Card>() {
@@ -369,12 +346,88 @@ public class MenuActivity extends Activity implements LocationListener{
 
     }
 
+    public void categoryCards(int c){
+        if(c == 1)
+           sortCuisine("American");
+        if(c == 2)
+            sortCuisine("Italian");
+        if(c == 3)
+            sortCuisine("Asian");
+        if(c == 4)
+            sortCuisine("Mediterranean");
+        if(c == 5)
+            sortCuisine("Coffee/Bakery");
+        if(c == 6)
+            sortAffordable();
+        if(c == 7)
+            sortWarrior();
+        if(c == 8)
+            sortOpened();
+        myAdapter = new CardArrayAdapter(getApplicationContext(), cards);
+        if(listView != null)
+            listView.setAdapter(myAdapter);
+
+    }
+
+    private void sortCuisine(String c){
+        ArrayList<Card> temp = new ArrayList<Card>();
+        for(int i =0; i<cardsOriginal.size();i++){
+            CustomCard cc = (CustomCard) cardsOriginal.get(i);
+            if((cc.info.cuisine.compareTo(c)) == 0)
+                temp.add(cardsOriginal.get(i));
+        }
+
+        cards.clear();
+        cards.addAll(temp);
+    }
+
+    private void sortAffordable(){
+        ArrayList<Card> temp = new ArrayList<Card>();
+        for(int i =0; i<cardsOriginal.size();i++){
+            CustomCard cc = (CustomCard) cardsOriginal.get(i);
+            if((cc.info.price.compareTo("$")) == 0)
+                temp.add(cardsOriginal.get(i));
+        }
+
+        cards.clear();
+        cards.addAll(temp);
+    }
+
+    private void sortOpened(){
+        ArrayList<Card> temp = new ArrayList<Card>();
+        for(int i =0; i<cards.size();i++){
+            CustomCard cc = (CustomCard) cards.get(i);
+            if(cc.info.open)
+                temp.add(cards.get(i));
+        }
+
+        cards.clear();
+        cards.addAll(temp);
+    }
+
+    private void sortWarrior(){
+        ArrayList<Card> temp = new ArrayList<Card>();
+        for(int i =0; i<cardsOriginal.size();i++){
+            CustomCard cc = (CustomCard) cardsOriginal.get(i);
+            if(cc.info.warriorD)
+                temp.add(cardsOriginal.get(i));
+        }
+
+        cards.clear();
+        cards.addAll(temp);
+    }
+
+
     public Bundle bundling(int id){
         Bundle b = new Bundle();
         b.putInt("info", id);
         b.putDouble("lat", myLocation.getLatitude());
         b.putDouble("long", myLocation.getLongitude());
         return b;
+    }
+
+    public int unBundling(Bundle b){
+        return b.getInt("c");
     }
 
 }

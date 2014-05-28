@@ -62,6 +62,28 @@ public class CustomCard extends Card {
         this.location = lc;
     }
 
+    public void setOpenClose(){
+        Date date = new Date();
+        Map<Integer, String> dayMapping = new HashMap<Integer, String>();
+
+        String[] days = {"sunday", "monday","tuesday",
+                "wednesday", "thursday", "friday", "saturday"};
+        for (int i = 0; i < days.length; i++) {
+            dayMapping.put(i, days[i]);
+        }
+
+        String stringDay = dayMapping.get(date.getDay());
+        Day dayHours = info.days.get(stringDay);
+
+        int currentHour = date.getHours()*100;
+        if((dayHours.open < currentHour && dayHours.close > currentHour) || dayHours.is24Hour())
+            info.open = true;
+        else
+            info.open = false;
+        if(dayHours.isClosed())
+            info.open = false;
+    }
+
 
     @Override
     public void setupInnerViewElements(ViewGroup parent, View view){

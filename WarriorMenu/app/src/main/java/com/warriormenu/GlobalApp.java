@@ -1,6 +1,7 @@
 package com.warriormenu;
 
 import android.app.Application;
+import android.graphics.Typeface;
 
 import java.util.Collections;
 import java.util.Vector;
@@ -10,11 +11,25 @@ import java.util.Vector;
  */
 public class GlobalApp extends Application {
     private Vector<RInfo> restaurants = new Vector<RInfo>();
+    private Typeface typeface;
+    private Typeface typeface2;
 
     public GlobalApp(){
         restaurants = new Vector<RInfo>();
     }
 
+    public void setTypefaces(Typeface t, Typeface t2){
+        this.typeface = t;
+        this.typeface2 = t2;
+    }
+
+    public Typeface getTypeface(){
+        return typeface;
+    }
+
+    public Typeface getTypeface2(){
+        return typeface2;
+    }
     public Vector<RInfo> getRestaurants(){
         return restaurants;
     }
@@ -24,6 +39,6 @@ public class GlobalApp extends Application {
     }
 
     public String getURL() {
-        return "http://192.168.1.215:3000";
+        return "http://warrior-dev.cfapps.io";
     }
 }

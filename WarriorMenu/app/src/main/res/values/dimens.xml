@@ -7,5 +7,10 @@
     <dimen name="address_size">15dp</dimen>
     <dimen name="distance">15dp</dimen>
     <dimen name="card_base_empty_height">70dp</dimen>
+    <dimen name="button_height">80dp</dimen>
+    <dimen name="button_width">150dp</dimen>
+    <dimen name="button_space_width">2dp</dimen>
+    <dimen name="button_margin">5dp</dimen>
+    <dimen name="button_cornerRadius">10dp</dimen>
 
     </resources>

@@ -41,6 +41,7 @@
             flatui:cornerRadius="0dp"
             android:singleLine="true"
             android:layout_marginLeft="2dp"
+            flatui:borderWidth="3dp"
             flatui:fieldStyle="box"/>
         <RatingBar
             android:layout_width="wrap_content"
@@ -68,6 +69,7 @@
         android:layout_below="@id/card_single_name"
         flatui:fieldStyle="box"
         flatui:cornerRadius="0dp"
+        flatui:borderWidth="3dp"
         flatui:theme="@array/custom_theme"/>
     <com.cengalabs.flatui.views.FlatButton
         android:id="@+id/card_single_submit"
@@ -82,6 +84,7 @@
         flatui:theme="@array/custom_theme"
         flatui:borderWidth="0dp"
         flatui:cornerRadius="0dp"
+        flatui:blockButtonEffectHeight="5dp"
         flatui:size="20dp"/>
 </LinearLayout>
 
