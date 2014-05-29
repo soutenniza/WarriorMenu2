@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -52,24 +53,26 @@ public class SplashActivity extends Activity implements LocationListener {
         StrictMode.ThreadPolicy policy =
                 new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        globalApp.setRestaurants(intRests());
+        ImageView imageView = (ImageView) findViewById(R.id.splash_icon);
+        imageView.setImageResource(R.drawable.icon_wm);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,0,this);
 
-        final TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
+        final TextView mainTitle = (TextView) findViewById(R.id.splash_msg);
 
 
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
+                globalApp.setRestaurants(intRests());
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
             }
         };
 
         Timer timer = new Timer();
-        timer.schedule(task, 5000);
+        timer.schedule(task, 2000);
 
     }
 

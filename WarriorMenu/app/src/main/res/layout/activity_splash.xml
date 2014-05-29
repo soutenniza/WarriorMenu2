@@ -8,8 +8,16 @@
         android:text="Welcome!\nLoading Restaurant Data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/splash_msg"
         android:textColor="@color/wayne_yellow"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/splash_icon"
+        android:layout_above="@+id/splash_msg"
+        />
+
 
 </RelativeLayout>
