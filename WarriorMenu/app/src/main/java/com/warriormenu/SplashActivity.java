@@ -60,6 +60,7 @@ public class SplashActivity extends Activity implements LocationListener {
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,0,this);
 
         final TextView mainTitle = (TextView) findViewById(R.id.splash_msg);
+        mainTitle.setTypeface(globalApp.getTypeface2());
 
 
         TimerTask task = new TimerTask() {
@@ -72,7 +73,7 @@ public class SplashActivity extends Activity implements LocationListener {
         };
 
         Timer timer = new Timer();
-        timer.schedule(task, 2000);
+        timer.schedule(task, 1);
 
     }
 

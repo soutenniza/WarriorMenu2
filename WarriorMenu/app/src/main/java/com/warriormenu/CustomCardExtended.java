@@ -142,7 +142,7 @@ public class CustomCardExtended extends CustomCard {
                 openClose.setTextColor(Color.parseColor("#D11919"));
                 info.open = false;
             }
-
+            openClose.setTypeface(typeface);
         }
 
         if(resHours != null){
@@ -199,7 +199,7 @@ public class CustomCardExtended extends CustomCard {
             for(int i = 0; i < info.comments.size(); i++){
                 Comment comment = info.comments.get(i);
                 temp += info.comments.get(i).rating;
-                CommentCard card = new CommentCard(mContext, comment.name, comment.comment, comment.rating);
+                CommentCard card = new CommentCard(mContext, comment.name, comment.comment, comment.rating ,typeface);
                 card.setBackgroundResourceId(R.color.lightgreytan);
                 cards.add(card);
                 Log.i("warrior", comment.name);

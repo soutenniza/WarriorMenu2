@@ -154,6 +154,7 @@ public class CustomCard extends Card {
                 openClose.setTextColor(Color.parseColor("#D11919"));
                 info.open = false;
             }
+            openClose.setTypeface(typeface);
 
         }
 

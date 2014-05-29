@@ -39,11 +39,12 @@ public class CommentCard extends Card {
     protected String review;
     protected double rating;
 
-    public CommentCard(Context context, String n, String r, double rating){
+    public CommentCard(Context context, String n, String r, double rating, Typeface tf){
         this(context);
         this.name = n;
         this.review = r;
         this.rating = rating;
+        this.typeface = tf;
     }
 
     public CommentCard(Context context){
@@ -63,10 +64,12 @@ public class CommentCard extends Card {
 
         if(commentUser != null){
                 commentUser.setText(name);
+                commentUser.setTypeface(typeface);
         }
 
         if(commentComment != null){
                 commentComment.setText(review);
+            commentComment.setTypeface(typeface);
         }
 
         if(ratingBar != null){

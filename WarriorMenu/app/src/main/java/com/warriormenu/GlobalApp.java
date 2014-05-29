@@ -50,7 +50,7 @@ public class GlobalApp extends Application {
     }
 
     public String getURL() {
-        return "http://warrior-dev.cfapps.io";
+        return "http://warrior-prod.herokuapp.com";
     }
 
     public ArrayList<Card> getOriginalCards(){

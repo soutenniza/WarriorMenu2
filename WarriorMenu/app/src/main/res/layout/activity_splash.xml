@@ -2,21 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wayne_green">
+    android:background="@color/lightgreytan">
 
     <TextView
         android:text="Welcome!\nLoading Restaurant Data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/splash_msg"
-        android:textColor="@color/wayne_yellow"
+        android:textSize="30dp"
+        android:textColor="@color/wayne_green"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:id="@+id/splash_icon"
         android:layout_above="@+id/splash_msg"
+        android:layout_centerHorizontal="true"
         />
 
 

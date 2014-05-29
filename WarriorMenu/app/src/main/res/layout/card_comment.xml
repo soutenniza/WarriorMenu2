@@ -31,7 +31,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginRight="2dp"
             android:layout_alignParentTop="true"
-            style="?android:attr/ratingBarStyleIndicator"
+            style="?android:attr/ratingBarStyleSmall"
             android:id="@+id/card_comment_stars"
             android:rating="2"
             android:numStars="5"

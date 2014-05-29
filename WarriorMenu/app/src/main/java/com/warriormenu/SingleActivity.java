@@ -61,9 +61,12 @@ public class SingleActivity extends Activity{
         final GlobalApp globalApp = (GlobalApp) getApplicationContext();
         mainTitle.setTypeface(globalApp.getTypeface());
         final EditText editName = (EditText) findViewById(R.id.card_single_name);
+        editName.setTypeface(globalApp.getTypeface());
         final EditText editComment = (EditText) findViewById(R.id.card_single_comment);
+        editComment.setTypeface(globalApp.getTypeface());
         final RatingBar ratingBar = (RatingBar) findViewById(R.id.card_single_stars);
         final Button button = (Button) findViewById(R.id.card_single_submit);
+        button.setTypeface(globalApp.getTypeface());
         LayerDrawable layer = (LayerDrawable) ratingBar.getProgressDrawable();
         layer.getDrawable(2).setColorFilter(Color.parseColor("#ffcc33"), PorterDuff.Mode.SRC_ATOP);
 
@@ -114,7 +117,7 @@ public class SingleActivity extends Activity{
                     e.printStackTrace();
                 }
 
-                CommentCard card = new CommentCard(getApplicationContext(), comment.name, comment.comment, comment.rating);
+                CommentCard card = new CommentCard(getApplicationContext(), comment.name, comment.comment, comment.rating, globalApp.getTypeface());
                 card.setBackgroundResourceId(R.color.lightgreytan);
                 customCardExtended.addNewComment(card);
 
