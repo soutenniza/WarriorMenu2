@@ -77,7 +77,6 @@ public class MenuActivity extends Activity{
         sortOptions = getResources().getStringArray(R.array.sorts);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.drawer_left);
-
         drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_item, sortOptions));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
         cardsOriginal = new ArrayList<Card>();

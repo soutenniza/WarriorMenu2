@@ -35,7 +35,6 @@
                 android:divider="@android:color/transparent"/>
         </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
 
-
     </LinearLayout>
 
     <ListView
@@ -47,6 +46,7 @@
         android:divider="@color/wayne_yellow"
         android:dividerHeight="1dp"
         android:background="@color/wayne_green"/>
+
 
 
 
