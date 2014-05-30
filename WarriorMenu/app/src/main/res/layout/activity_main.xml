@@ -139,6 +139,35 @@
             flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
             flatui:cornerRadius="@dimen/button_cornerRadius"
             flatui:theme="@array/custom_theme"/>
+        <TextView
+            android:layout_width="@dimen/button_space_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/centerfive"
+            android:layout_below="@id/centerfour"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/button_margin"/>
+        <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/latino_button"
+            android:layout_below="@id/med_button"
+            android:text="Latino"
+            android:layout_toLeftOf="@+id/centerfive"
+            android:layout_marginTop="@dimen/button_margin"
+            flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
+            flatui:cornerRadius="@dimen/button_cornerRadius"
+            flatui:theme="@array/custom_theme"/>
+        <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:id="@+id/all_button"
+            android:layout_below="@id/open_button"
+            android:text="All the foods!"
+            android:layout_toRightOf="@id/centerfive"
+            android:layout_marginTop="@dimen/button_margin"
+            flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
+            flatui:cornerRadius="@dimen/button_cornerRadius"
+            flatui:theme="@array/custom_theme"/>
 
     </RelativeLayout>
 

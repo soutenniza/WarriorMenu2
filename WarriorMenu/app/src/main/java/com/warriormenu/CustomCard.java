@@ -192,11 +192,23 @@ public class CustomCard extends Card {
             Location.distanceBetween(location.getLatitude(), location.getLongitude(), info.latitude, info.longitude, results);
             float temp = results[0] * 0.0006213f;
             info.distance = results[0];
+
             //String str = String.format("%.2f", temp);
             button.setText("Directions");
             button.setTypeface(typeface);
             info.url = "http://maps.google.com/maps?saddr=" + location.getLatitude() + "," + location.getLongitude();
-            info.url = info.url + "&daddr=" + info.name + "+"+info.address;
+
+            if((info.address.compareTo("Student Center") == 0)){
+                info.url = info.url + "&daddr=" + "5221 Gullen Mall" +
+                        " Detroit, MI 48202";
+            }else if((info.address.compareTo("Towers Residential Suites")) == 0) {
+                info.url = info.url + "&daddr=" + "655 W. Kirby" +
+                        " Detroit, MI 48202";
+            }else if((info.name.compareTo("P.O.D. Express")) == 0) {
+                info.url = info.url + "&daddr=" + info.address + " Detroit, MI";
+            }else{
+                info.url = info.url + "&daddr=" + info.name + "+" + info.address;
+            }
             //+ info.latitude + "," + info.longitude;
             button.setOnClickListener(new View.OnClickListener(){
                 @Override

@@ -2,6 +2,7 @@ package com.warriormenu;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -127,6 +128,8 @@ public class SingleActivity extends Activity{
                 button.setClickable(false);
             }
         });
+
+        Bitmap bitmap = cardView.createBitmap();
 
     }
 

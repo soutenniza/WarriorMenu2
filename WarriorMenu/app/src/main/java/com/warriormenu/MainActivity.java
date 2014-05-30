@@ -38,6 +38,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Button button6 = (Button) findViewById(R.id.affordable_button);
         Button button7 = (Button) findViewById(R.id.warriorDollar_button);
         Button button8 = (Button) findViewById(R.id.open_button);
+        Button button9 = (Button) findViewById(R.id.latino_button);
+        Button button10 = (Button) findViewById(R.id.all_button);
         button1.setTypeface(globalApp.getTypeface2());
         button2.setTypeface(globalApp.getTypeface2());
         button3.setTypeface(globalApp.getTypeface2());
@@ -46,11 +48,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         button6.setTypeface(globalApp.getTypeface2());
         button7.setTypeface(globalApp.getTypeface2());
         button8.setTypeface(globalApp.getTypeface2());
+        button9.setTypeface(globalApp.getTypeface2());
+        button10.setTypeface(globalApp.getTypeface2());
         button1.setTextColor(getResources().getColor(R.color.wayne_yellow));
         button3.setTextColor(getResources().getColor(R.color.wayne_yellow));
         button5.setTextColor(getResources().getColor(R.color.wayne_yellow));
         button7.setTextColor(getResources().getColor(R.color.wayne_yellow));
-
+        button9.setTextColor(getResources().getColor(R.color.wayne_yellow));
+        button10.setTextColor(getResources().getColor(R.color.wayne_yellow));
 
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
@@ -60,6 +65,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         button6.setOnClickListener(this);
         button7.setOnClickListener(this);
         button8.setOnClickListener(this);
+        button9.setOnClickListener(this);
+        button10.setOnClickListener(this);
 
     }
 
@@ -90,6 +97,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             break;
             case R.id.open_button:
                 categoryPicked = 8;
+            break;
+            case R.id.latino_button:
+                categoryPicked = 9;
             break;
         }
 

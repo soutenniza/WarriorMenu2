@@ -3,6 +3,7 @@ package com.warriormenu;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -71,6 +72,8 @@ public class MenuActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        SharedPreferences preferences = this.getSharedPreferences("user", Context.MODE_PRIVATE);
+        boolean firstStart = preferences.getBoolean("drawer", true);
         globalApp = (GlobalApp) getApplicationContext();
         final TextView mainTitle = (TextView) findViewById(R.id.main_textView1);
         mainTitle.setTypeface(globalApp.getTypeface());
@@ -79,6 +82,13 @@ public class MenuActivity extends Activity{
         drawerList = (ListView) findViewById(R.id.drawer_left);
         drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_item, sortOptions));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
+        if(firstStart){
+            drawerLayout.openDrawer(drawerList);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("drawer", false);
+            editor.commit();
+        }
+
         cardsOriginal = new ArrayList<Card>();
         intializeCards();
         cards = new ArrayList<Card>(cardsOriginal);
@@ -200,6 +210,8 @@ public class MenuActivity extends Activity{
             sortWarrior();
         if(c == 8)
             sortOpened();
+        if(c == 9)
+            sortCuisine("Latino");
         myAdapter = new CardArrayAdapter(getApplicationContext(), cards);
         if(listView != null)
             listView.setAdapter(myAdapter);
