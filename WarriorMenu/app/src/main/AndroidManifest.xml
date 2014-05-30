@@ -28,6 +28,7 @@
         <activity
             android:name="com.warriormenu.MainActivity">
         </activity>
+        <activity android:name=".InfoActivity"></activity>
     </application>
 
 </manifest>

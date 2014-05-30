@@ -17,5 +17,6 @@
     </array>
 
     <string name="title_activity_splash">SplashActivity</string>
-
+    <string name="wayne_launchpad">Thank you Wayne State University\'s Blackstone LaunchPad Program for inspiring us for creating this app.</string>
+    <string name="libraries">Libraries: Used in making this app were CardsLib by Gabriele Mariotti and FlatUI by Emrullah Lüleci from Github.</string>
 </resources>

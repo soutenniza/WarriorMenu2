@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Vector;
@@ -68,6 +69,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         button9.setOnClickListener(this);
         button10.setOnClickListener(this);
 
+        ImageButton imageButton = (ImageButton) findViewById(R.id.info_button);
+        imageButton.setImageResource(R.drawable.ic_action_about);
+        imageButton.setColorFilter(getResources().getColor(R.color.wayne_yellow));
+        imageButton.setBackgroundColor(getResources().getColor(R.color.wayne_green));
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, InfoActivity.class));
+
+            }
+        });
     }
 
     @Override

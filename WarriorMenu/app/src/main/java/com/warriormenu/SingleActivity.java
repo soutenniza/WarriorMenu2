@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.cengalabs.flatui.views.FlatButton;
@@ -42,6 +44,7 @@ import java.util.List;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
+import it.gmariotti.cardslib.library.utils.BitmapUtils;
 import it.gmariotti.cardslib.library.view.CardListView;
 import it.gmariotti.cardslib.library.view.CardView;
 
@@ -74,7 +77,7 @@ public class SingleActivity extends Activity{
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         ArrayList<Card> cards = new ArrayList<Card>();
         final CustomCardExtended customCardExtended = new CustomCardExtended(getApplicationContext(), globalApp.getRestaurants().get(r), globalApp.getTypeface(), globalApp.getTypeface2(), globalApp.getLocation());
-        CardView cardView = (CardView) findViewById(R.id.card_single);
+        final CardView cardView = (CardView) findViewById(R.id.card_single);
         cardView.setCard(customCardExtended);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -129,10 +132,24 @@ public class SingleActivity extends Activity{
             }
         });
 
-        Bitmap bitmap = cardView.createBitmap();
+        /*bitmap = cardView.createBitmap();  Sharing not working yet
+        Button imageButton = (Button) findViewById(R.id.share_button);
+        imageButton.setBackgroundColor(getResources().getColor(R.color.wayne_yellow));
+        imageButton.setClickable(true);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("image/png");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                intent.putExtra(Intent.EXTRA_STREAM, bitmap);
+                startActivity(Intent.createChooser(intent, "Share restaurant using"));
+            }
+        });*/
 
     }
-
 
     public int unBundling(Bundle b){
         Double latitude = b.getDouble("lat");
@@ -153,4 +170,5 @@ public class SingleActivity extends Activity{
         b.putDouble("long", myLocation.getLongitude());
         return b;
     }
+
 }

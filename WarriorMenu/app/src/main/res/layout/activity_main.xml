@@ -168,7 +168,14 @@
             flatui:blockButtonEffectHeight="@dimen/button_cornerRadius"
             flatui:cornerRadius="@dimen/button_cornerRadius"
             flatui:theme="@array/custom_theme"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/info_button"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
 
     </RelativeLayout>
+
 
 </LinearLayout>
